@@ -528,7 +528,10 @@ async function loadRoster() {
     return;
   }
   try {
-    const res  = await fetch(`${SCRIPT_URL}?action=getRoster`);
+    const res = await fetch(`${SCRIPT_URL}?action=getRoster`, {
+      redirect: 'follow',
+      method: 'GET'
+    });
     const data = await res.json();
     if (!data.students || data.students.length === 0) {
       grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem">No roster loaded yet. Ask your teacher.</p>';
@@ -747,24 +750,24 @@ async function showSuccess(raw, scaled, responses) {
 
   // Now call Claude for real study plan
   if (SCRIPT_URL) {
-    try {
-      const params = new URLSearchParams({
-        action: 'generatePlan',
-        payload: JSON.stringify({student:studentName, exam:currentExam,
-          responses, rawScore:raw, scaledScore:scaled, teacherNote})
-      });
-      const res = await fetch(`${SCRIPT_URL}?action=getRoster`);
-      const data = await res.json();
-      if (data.plan) {
-        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
-      } else {
-        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
-      }
-    } catch(e) {
+  try {
+    const params = new URLSearchParams({
+      action: 'generatePlan',
+      payload: JSON.stringify({student:studentName, exam:currentExam,
+        responses, rawScore:raw, scaledScore:scaled, teacherNote})
+    });
+    const res = await fetch(`${SCRIPT_URL}?${params}`, {
+      redirect: 'follow',
+      method: 'GET'
+    });
+    const data = await res.json();
+    if (data.plan) {
+      document.getElementById('planContent').innerHTML = formatPlan(data.plan);
+    } else {
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
-  } else {
-    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Apps Script not connected. Use the AI Tutor Prompt below to get your study plan.</p>`;
+  } catch(e) {
+    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
   }
 }
 
