@@ -753,7 +753,7 @@ async function showSuccess(raw, scaled, responses) {
         payload: JSON.stringify({student:studentName, exam:currentExam,
           responses, rawScore:raw, scaledScore:scaled, teacherNote})
       });
-      const res = await fetch(`${SCRIPT_URL}?${params}`);
+      const res = await fetch(`${SCRIPT_URL}?action=getRoster`);
       const data = await res.json();
       if (data.plan) {
         document.getElementById('planContent').innerHTML = formatPlan(data.plan);
