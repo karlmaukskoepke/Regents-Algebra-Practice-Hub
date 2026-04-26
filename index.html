@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algebra I Regents — Exam Reflection</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #1c1c2e;
+  --paper:  #faf9f5;
+  --cream:  #f0ece0;
+  --rule:   #ddd8c8;
+  --accent: #b83232;
+  --green:  #1a6b3c;
+  --green-s:#e6f4ed;
+  --amber:  #b86a0a;
+  --amber-s:#fef3e2;
+  --blue:   #1a3d6b;
+  --blue-s: #e6eef8;
+  --purple: #5b2d8e;
+  --purple-s:#f0eaf8;
+  --red-s:  #fceaea;
+  --muted:  #7a7a8c;
+  --r: 4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;
+  background-image:repeating-linear-gradient(transparent,transparent 27px,var(--rule) 27px,var(--rule) 28px);
+  background-attachment:fixed}
+
+/* ── HEADER ── */
+.hdr{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+.hdr-inner{max-width:800px;margin:0 auto;padding:16px 24px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.hdr-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700}
+.hdr-sub{font-family:'DM Mono',monospace;font-size:.72rem;color:#9090b0;letter-spacing:.06em}
+.prog-wrap{height:3px;background:#2c2c4a}
+.prog-bar{height:3px;background:var(--accent);transition:width .4s ease;width:0%}
+
+/* ── SCREENS ── */
+.screen{display:none;max-width:800px;margin:0 auto;padding:40px 24px 100px}
+.screen.active{display:block}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:32px;
+  margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{font-family:'Playfair Display',serif;font-size:1.45rem;margin-bottom:12px}
+.card p{font-size:.93rem;line-height:1.75;color:#333;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+
+/* ── EXAM SELECTOR ── */
+.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.exam-btn{padding:18px 16px;border:2px solid var(--rule);border-radius:var(--r);
+  background:var(--paper);cursor:pointer;text-align:left;transition:all .18s;font-family:'DM Sans',sans-serif}
+.exam-btn:hover{border-color:var(--ink);background:var(--cream)}
+.exam-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.exam-btn .eb-date{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;display:block}
+.exam-btn .eb-note{font-size:.75rem;margin-top:4px;opacity:.7;display:block;font-style:italic}
+
+/* ── FORM FIELDS ── */
+.field-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.field{flex:1;min-width:140px}
+.field label{display:block;font-family:'DM Mono',monospace;font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input[type=text]{width:100%;padding:10px 14px;border:1px solid var(--rule);border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;font-size:.98rem;background:var(--paper);color:var(--ink);outline:none;transition:border-color .2s}
+input[type=text]:focus{border-color:var(--ink);background:#fff}
+
+/* ── START BTN ── */
+.btn-primary{background:var(--ink);color:var(--paper);border:none;padding:13px 32px;
+  font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:500;border-radius:var(--r);
+  cursor:pointer;letter-spacing:.02em;transition:all .2s;margin-top:24px}
+.btn-primary:hover{background:var(--accent);transform:translateY(-1px)}
+.btn-primary:disabled{background:var(--muted);cursor:not-allowed;transform:none}
+
+/* ── EXAM NOTES BANNER ── */
+.exam-notice{background:var(--amber-s);border:1px solid var(--amber);border-radius:var(--r);
+  padding:14px 18px;margin-bottom:28px;font-size:.86rem;line-height:1.65;color:#5a3a00}
+.exam-notice strong{display:block;margin-bottom:4px;font-size:.8rem;font-family:'DM Mono',monospace;
+  letter-spacing:.06em;text-transform:uppercase}
+
+/* ── PART DIVIDER ── */
+.part-hdr{display:flex;align-items:center;gap:14px;margin:44px 0 18px}
+.part-tag{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#fff;background:var(--ink);padding:4px 10px;border-radius:2px;white-space:nowrap}
+.part-name{font-family:'Playfair Display',serif;font-size:1.05rem}
+.part-rule{flex:1;height:1px;background:var(--rule)}
+.part-pts{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)}
+
+/* ── QUESTION CARD ── */
+.qcard{background:#fff;border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
+.qcard:hover{box-shadow:0 3px 16px rgba(0,0,0,.09)}
+.qcard.done{border-left:3px solid var(--green)}
+.qcard.flagged{opacity:.6}
+
+.q-head{display:flex;align-items:flex-start;gap:14px;padding:18px 20px 14px;cursor:pointer;user-select:none}
+.q-num{font-family:'DM Mono',monospace;font-size:.7rem;background:var(--cream);
+  border:1px solid var(--rule);padding:3px 8px;border-radius:2px;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.q-text{flex:1;font-size:.9rem;line-height:1.55}
+.q-stat{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);white-space:nowrap;margin-top:3px;flex-shrink:0}
+.q-stat.ok{color:var(--green)}
+
+.flag-banner{padding:8px 20px;background:var(--amber-s);font-size:.8rem;
+  color:#5a3a00;border-bottom:1px solid #f0d090;font-style:italic}
+
+/* score chips for FR questions */
+.score-row{padding:0 20px 14px;border-bottom:1px solid var(--cream);display:flex;align-items:center;gap:10px}
+.score-lbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:4px 11px;border:1px solid var(--rule);border-radius:20px;
+  font-family:'DM Mono',monospace;font-size:.78rem;cursor:pointer;background:var(--paper);
+  color:var(--muted);transition:all .15s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ── BODY (expandable) ── */
+.q-body{padding:14px 20px 18px;border-top:1px solid var(--cream)}
+
+.cat-lbl,.step-lbl,.ref-lbl{font-family:'DM Mono',monospace;font-size:.68rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.step-lbl{margin-top:14px}
+.ref-lbl{margin-top:14px}
+
+.cats{display:flex;flex-direction:column;gap:6px;margin-bottom:0}
+.cat{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;border:1px solid var(--rule);
+  border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--paper)}
+.cat:hover{background:var(--cream)}
+.cat-dot{width:15px;height:15px;border:2px solid var(--rule);border-radius:50%;flex-shrink:0;
+  margin-top:2px;transition:all .15s;position:relative}
+.cat.sel .cat-dot{border-color:var(--ink);background:var(--ink)}
+.cat.sel .cat-dot::after{content:'';position:absolute;width:5px;height:5px;background:#fff;
+  border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+.cat-text{font-size:.86rem;line-height:1.4}
+.cat-text em{display:block;font-size:.76rem;color:var(--muted);font-style:normal;margin-top:1px}
+
+/* color-code selected cats */
+.cat.sel[data-v="correct"],.cat.sel[data-v="full"]{background:var(--green-s);border-color:var(--green)}
+.cat.sel[data-v="guess"],.cat.sel[data-v="partial-close"]{background:var(--amber-s);border-color:var(--amber)}
+.cat.sel[data-v="small-error"],.cat.sel[data-v="partial-gap"]{background:var(--blue-s);border-color:var(--blue)}
+.cat.sel[data-v="misunderstood"],.cat.sel[data-v="zero-tried"]{background:var(--purple-s);border-color:var(--purple)}
+.cat.sel[data-v="forgot"],.cat.sel[data-v="zero-blank"]{background:var(--red-s);border-color:var(--accent)}
+
+/* only show reflection box for non-correct */
+.ref-wrap{display:none}
+.ref-wrap.show{display:block}
+
+textarea{width:100%;padding:9px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.6;color:var(--ink);
+  background:var(--paper);resize:vertical;min-height:66px;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--ink);background:#fff}
+textarea::placeholder{color:#aaa;font-style:italic}
+
+.collapse-btn{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);
+  border:none;background:none;cursor:pointer;margin-top:10px;text-decoration:underline}
+.collapse-btn:hover{color:var(--ink)}
+
+/* ── SUBMIT SECTION ── */
+.submit-wrap{margin-top:50px;padding-top:28px;border-top:2px solid var(--ink)}
+.submit-wrap h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:6px}
+.submit-wrap p{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:20px}
+.err{color:var(--accent);font-size:.84rem;margin-top:8px;display:none}
+
+/* ── SUCCESS / STUDY PLAN ── */
+.success{background:var(--green-s);border:1px solid var(--green);border-radius:var(--r);
+  padding:28px;margin-top:24px;display:none}
+.success h3{font-family:'Playfair Display',serif;color:var(--green);font-size:1.3rem;margin-bottom:8px}
+.success p{font-size:.9rem;line-height:1.7;margin-bottom:8px}
+
+.plan-box{background:#fff;border:1px solid var(--rule);border-radius:var(--r);
+  padding:24px;margin-top:20px}
+.plan-box h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:12px}
+.plan-loading{color:var(--muted);font-style:italic;font-size:.9rem}
+
+.prompt-box{background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
+  padding:16px;margin-top:16px;font-family:'DM Mono',monospace;font-size:.76rem;
+  line-height:1.7;white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--ink);color:#fff;
+  border:none;padding:5px 12px;border-radius:2px;font-family:'DM Mono',monospace;
+  font-size:.7rem;cursor:pointer;transition:background .15s}
+.copy-btn:hover{background:var(--accent)}
+
+/* ── SCORE SUMMARY ── */
+.score-summary{background:var(--ink);color:var(--paper);border-radius:var(--r);
+  padding:20px 24px;margin-top:20px;display:flex;gap:32px;flex-wrap:wrap;align-items:center}
+.ss-item{text-align:center}
+.ss-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;display:block}
+.ss-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.07em;
+  text-transform:uppercase;opacity:.7;display:block;margin-top:2px}
+
+/* ── FLOAT ── */
+.float{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--paper);
+  padding:9px 16px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:none;opacity:.92}
+
+@media(max-width:600px){
+  .exam-grid{grid-template-columns:1fr}
+  .screen{padding:24px 14px 80px}
+  .q-head{padding:14px 14px 10px}
+  .q-body{padding:12px 14px 14px}
+  .score-row{padding:0 14px 12px}
+  .score-summary{gap:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <span class="hdr-title">Algebra I Regents</span>
+    <span class="hdr-sub">EXAM REFLECTION &amp; SELF-ASSESSMENT</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+</header>
+
+<!-- ══ SCREEN 1: SETUP ══ -->
+<div class="screen active" id="screenSetup">
+  <div class="card" style="border-top:4px solid var(--accent)">
+    <h2>Welcome.</h2>
+    <p>Your teacher has already scored your written responses. For each question, you'll reflect on what happened and what you'll do next. Keep your paper exam in front of you.</p>
+    <p>Be honest — this data is used to build a personalized study plan just for you.</p>
+  </div>
+
+  <div class="card">
+    <h2>Which exam are you reflecting on?</h2>
+    <div class="exam-grid" id="examGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Your name</h2>
+    <div class="field-row">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="firstName" placeholder="e.g. Jordan" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Last Initial</label>
+        <input type="text" id="lastInitial" placeholder="e.g. M" maxlength="2" autocomplete="off">
+      </div>
+    </div>
+    <button class="btn-primary" id="startBtn" onclick="startExam()">Start Reflection →</button>
+    <p class="err" id="setupErr"></p>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: QUESTIONS ══ -->
+<div class="screen" id="screenQ">
+  <div class="exam-notice" id="examNotice"></div>
+  <div id="qContainer"></div>
+  <div class="submit-wrap">
+    <h3>Ready to submit?</h3>
+    <p>Once you submit, your reflection is sent to your teacher and you'll receive your estimated score and a personalized study plan.</p>
+    <button class="btn-primary" id="submitBtn" onclick="submitReflection()">Submit My Reflection</button>
+    <p class="err" id="submitErr"></p>
+  </div>
+  <div class="success" id="successPanel">
+    <h3>Reflection submitted ✓</h3>
+    <p>Here's your estimated score and a personalized study plan based on your responses.</p>
+    <div class="score-summary" id="scoreSummary"></div>
+    <div class="plan-box">
+      <h4>Your Study Plan</h4>
+      <div id="planContent"><p class="plan-loading">Generating your personalized plan…</p></div>
+    </div>
+    <div class="plan-box" style="margin-top:16px">
+      <h4>AI Tutor Prompt — copy and paste this into any AI</h4>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px">
+        Paste this into Claude, ChatGPT, or any AI assistant to get personalized practice problems and feedback. You can also take a photo of your work and upload it for even more specific help.
+      </p>
+      <div class="prompt-box" id="promptBox">
+        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+        <span id="promptText"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="float" id="floatProg">0 / 0 reflected</div>
+
+<script src="examData.js"></script>
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────
+const SCRIPT_URL = ''; // paste your Apps Script URL here after setup
+
+// ── MC CATEGORIES ───────────────────────────────────────────────────
+const MC_CATS = [
+  { v:'correct',       label:'✓ I got this right',          note:'I understood and solved it correctly' },
+  { v:'guess',         label:'🎲 Lucky guess — got it right', note:'I wasn\'t confident but guessed correctly' },
+  { v:'small-error',   label:'⚡ Small error — I knew the method', note:'Careless mistake; I know how to do this' },
+  { v:'misunderstood', label:'❓ I misread or misunderstood the question', note:'I didn\'t understand what was being asked' },
+  { v:'forgot',        label:'📚 I forgot how to do this',  note:'I need to relearn this topic' },
+];
+
+const FR_CATS = [
+  { v:'full',          label:'✓ Full credit',                note:'Got all the points' },
+  { v:'partial-close', label:'◑ Partial — almost there',    note:'Small error or missing step' },
+  { v:'partial-gap',   label:'◐ Partial — real gap',        note:'Got some credit but fuzzy on parts of this' },
+  { v:'zero-tried',    label:'○ No credit — I tried',       note:'Attempted but couldn\'t complete it' },
+  { v:'zero-blank',    label:'✗ Left blank',                 note:'Didn\'t attempt this question' },
+];
+
+const CORRECT_VALS = new Set(['correct','full']);
+const NEEDS_REFLECTION = new Set(['guess','small-error','misunderstood','forgot','partial-close','partial-gap','zero-tried','zero-blank']);
+
+// ── STATE ────────────────────────────────────────────────────────────
+let currentExam = null;
+let studentName = '';
+let state = {}; // keyed by question number
+
+// ── SETUP SCREEN ─────────────────────────────────────────────────────
+function buildExamGrid() {
+  const grid = document.getElementById('examGrid');
+  Object.keys(EXAMS).forEach(key => {
+    const btn = document.createElement('button');
+    btn.className = 'exam-btn';
+    btn.onclick = () => selectExam(key, btn);
+    btn.innerHTML = `<span class="eb-date">${key}</span><span class="eb-note">Algebra I Regents</span>`;
+    grid.appendChild(btn);
+  });
+}
+
+function selectExam(key, el) {
+  currentExam = key;
+  document.querySelectorAll('.exam-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startExam() {
+  const first = document.getElementById('firstName').value.trim();
+  const last  = document.getElementById('lastInitial').value.trim();
+  const err   = document.getElementById('setupErr');
+
+  if (!currentExam) { err.textContent = 'Please select an exam.'; err.style.display='block'; return; }
+  if (!first || !last) { err.textContent = 'Please enter your name.'; err.style.display='block'; return; }
+
+  studentName = `${first} ${last}.`;
+  state = {};
+  buildQuestions();
+  showScreen('screenQ');
+}
+
+// ── BUILD QUESTIONS ──────────────────────────────────────────────────
+function buildQuestions() {
+  const exam = EXAMS[currentExam];
+  const container = document.getElementById('qContainer');
+  container.innerHTML = '';
+
+  // Exam notice
+  const notice = document.getElementById('examNotice');
+  notice.innerHTML = `<strong>Note for this exam</strong>${exam.notes}`;
+
+  let totalQ = 0;
+  exam.parts.forEach(part => {
+    totalQ += part.questions.length;
+
+    // Part header
+    const ph = document.createElement('div');
+    ph.className = 'part-hdr';
+    ph.innerHTML = `<span class="part-tag">Part ${part.id}</span><span class="part-name">${part.title}</span><span class="part-rule"></span><span class="part-pts">${part.credits} pt${part.credits>1?'s':''} each${part.partial?' · partial credit':' · no partial'}</span>`;
+    container.appendChild(ph);
+
+    const isMC = part.id === 'I';
+    const cats = isMC ? MC_CATS : FR_CATS;
+
+    part.questions.forEach(q => {
+      state[q.n] = { category: null, score: null, reflection: '', topic: q.topic, flag: q.flag };
+
+      const card = document.createElement('div');
+      card.className = 'qcard' + (q.flag ? ' flagged' : '');
+      card.id = `qcard-${q.n}`;
+
+      // Score chips for FR
+      let scoreHtml = '';
+      if (!isMC) {
+        let chips = '';
+        for (let i = 0; i <= part.credits; i++) {
+          chips += `<span class="chip" data-q="${q.n}" data-s="${i}" onclick="setScore(${q.n},${i},this)">${i}/${part.credits}</span>`;
+        }
+        scoreHtml = `<div class="score-row"><span class="score-lbl">My score:</span><div class="chips">${chips}</div></div>`;
+      }
+
+      // Category options
+      const catHtml = cats.map(c =>
+        `<div class="cat" data-v="${c.v}" data-q="${q.n}" onclick="setCat(${q.n},'${c.v}',this)">
+          <span class="cat-dot"></span>
+          <span class="cat-text">${c.label}<em>${c.note}</em></span>
+        </div>`
+      ).join('');
+
+      const starter = STARTERS[q.topic] || 'e.g. I need to review this topic because…';
+
+      const flagBanner = q.flag
+        ? `<div class="flag-banner">⚑ ${q.flagNote}</div>`
+        : '';
+
+      card.innerHTML = `
+        <div class="q-head" onclick="toggleBody(${q.n})">
+          <span class="q-num">Q${q.n}</span>
+          <span class="q-text">${q.text}</span>
+          <span class="q-stat" id="stat-${q.n}">tap to reflect</span>
+        </div>
+        ${flagBanner}
+        ${scoreHtml}
+        <div class="q-body" id="body-${q.n}" style="display:none">
+          <div class="cat-lbl">What happened on this question?</div>
+          <div class="cats">${catHtml}</div>
+          <div class="ref-wrap" id="ref-wrap-${q.n}">
+            <div class="ref-lbl">In one sentence — what went wrong or what do you need to understand?</div>
+            <textarea id="ref-${q.n}" placeholder="${starter}" oninput="setRef(${q.n},this.value)" rows="2"></textarea>
+          </div>
+          <button class="collapse-btn" onclick="toggleBody(${q.n})">↑ Collapse</button>
+        </div>`;
+
+      container.appendChild(card);
+    });
+  });
+
+  updateProgress(totalQ);
+}
+
+// ── INTERACTIONS ─────────────────────────────────────────────────────
+function toggleBody(n) {
+  const b = document.getElementById(`body-${n}`);
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+}
+
+function setScore(n, s, el) {
+  state[n].score = s;
+  el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  updateProgress();
+}
+
+function setCat(n, v, el) {
+  state[n].category = v;
+  const card = document.getElementById(`qcard-${n}`);
+  card.querySelectorAll('.cat').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+
+  // Show/hide reflection box
+  const rw = document.getElementById(`ref-wrap-${n}`);
+  if (NEEDS_REFLECTION.has(v)) rw.classList.add('show');
+  else rw.classList.remove('show');
+
+  // Update card state
+  const stat = document.getElementById(`stat-${n}`);
+  if (CORRECT_VALS.has(v)) {
+    card.className = 'qcard done';
+    stat.textContent = '✓ got it'; stat.className = 'q-stat ok';
+  } else {
+    card.className = 'qcard done';
+    stat.textContent = '✎ reflected'; stat.className = 'q-stat ok';
+  }
+  updateProgress();
+}
+
+function setRef(n, v) { state[n].reflection = v; }
+
+let _totalQ = 37;
+function updateProgress(total) {
+  if (total) _totalQ = total;
+  const reflected = Object.values(state).filter(s => s.category).length;
+  const pct = (reflected / _totalQ) * 100;
+  document.getElementById('progBar').style.width = pct + '%';
+  document.getElementById('floatProg').textContent = `${reflected} / ${_totalQ} reflected`;
+}
+
+// ── SCORE CALC ────────────────────────────────────────────────────────
+function calcScore() {
+  const exam = EXAMS[currentExam];
+  const chart = CONVERSION_CHARTS[currentExam];
+  let raw = 0;
+
+  exam.parts.forEach(part => {
+    const isMC = part.id === 'I';
+    part.questions.forEach(q => {
+      if (q.flag) return; // excluded
+      const s = state[q.n];
+      if (!s) return;
+      if (isMC) {
+        if (s.category === 'correct' || s.category === 'guess') raw += 2;
+      } else {
+        if (s.score !== null) raw += s.score;
+      }
+    });
+  });
+
+  const scaled = chart.chart[raw] ?? 0;
+  return { raw, scaled };
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────
+async function submitReflection() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const { raw, scaled } = calcScore();
+
+  // Build row data
+  const exam = EXAMS[currentExam];
+  const rows = [];
+  exam.parts.forEach(part => {
+    part.questions.forEach(q => {
+      const s = state[q.n];
+      rows.push({
+        student: studentName,
+        exam: currentExam,
+        part: part.id,
+        question: q.n,
+        topic: q.topic,
+        flag: q.flag || '',
+        score: s.score !== null ? s.score : '',
+        category: s.category || '',
+        reflection: s.reflection || '',
+        rawScore: raw,
+        scaledScore: scaled,
+        timestamp: new Date().toISOString(),
+      });
+    });
+  });
+
+  // Send to Google Sheets or download CSV
+  if (SCRIPT_URL) {
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student: studentName, exam: currentExam, responses: rows, rawScore: raw, scaledScore: scaled })
+      });
+    } catch(e) { downloadCSV(rows); }
+  } else {
+    downloadCSV(rows);
+  }
+
+  showSuccess(raw, scaled, rows);
+}
+
+function downloadCSV(rows) {
+  const headers = ['Student','Exam','Part','Question','Topic','Flag','Score','Category','Reflection','Raw Score','Scaled Score','Timestamp'];
+  const csv = [headers.join(','), ...rows.map(r =>
+    [r.student,r.exam,`Part ${r.part}`,r.question,`"${r.topic}"`,r.flag,r.score,r.category,
+     `"${(r.reflection||'').replace(/"/g,'""')}"`,r.rawScore,r.scaledScore,r.timestamp].join(',')
+  )].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = `${studentName.replace(/\s/g,'_')}_${currentExam.replace(/\s/g,'_')}.csv`;
+  a.click();
+}
+
+// ── SHOW SUCCESS + PLAN ───────────────────────────────────────────────
+function showSuccess(raw, scaled, rows) {
+  document.getElementById('submitBtn').style.display = 'none';
+  const panel = document.getElementById('successPanel');
+  panel.style.display = 'block';
+
+  // Score summary
+  const maxRaw = CONVERSION_CHARTS[currentExam].maxRaw;
+  const level = scaled >= 85 ? '5 — Mastery' : scaled >= 80 ? '4 — Proficient' : scaled >= 65 ? '3 — Passing' : '2 — Below Passing';
+  document.getElementById('scoreSummary').innerHTML = `
+    <div class="ss-item"><span class="ss-num">${raw}<span style="font-size:1rem;opacity:.6">/${maxRaw}</span></span><span class="ss-label">Raw Score</span></div>
+    <div class="ss-item"><span class="ss-num">${scaled}</span><span class="ss-label">Scale Score</span></div>
+    <div class="ss-item"><span class="ss-num" style="font-size:1.1rem">${level}</span><span class="ss-label">Performance Level</span></div>`;
+
+  // Build study plan & prompt
+  buildStudyPlan(rows, raw, scaled);
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function buildStudyPlan(rows, raw, scaled) {
+  const weakTopics = {};
+  const errorTypes = { 'small-error':0, 'misunderstood':0, 'forgot':0, 'zero-tried':0, 'zero-blank':0, 'partial-gap':0, 'partial-close':0 };
+
+  rows.forEach(r => {
+    if (!r.category || r.flag) return;
+    if (!CORRECT_VALS.has(r.category)) {
+      if (!weakTopics[r.topic]) weakTopics[r.topic] = { count:0, cats:[], reflections:[] };
+      weakTopics[r.topic].count++;
+      weakTopics[r.topic].cats.push(r.category);
+      if (r.reflection) weakTopics[r.topic].reflections.push(r.reflection);
+      if (errorTypes[r.category] !== undefined) errorTypes[r.category]++;
+    }
+  });
+
+  const sorted = Object.entries(weakTopics).sort((a,b) => b[1].count - a[1].count);
+  const top3 = sorted.slice(0,3);
+
+  // Dominant error pattern
+  const maxErr = Object.entries(errorTypes).sort((a,b)=>b[1]-a[1])[0];
+  let patternNote = '';
+  if (maxErr[0] === 'small-error' || maxErr[0] === 'partial-close') patternNote = 'Your biggest issue is <strong>careless errors</strong> — you know the material but are losing points to small mistakes. Slow down and check your work.';
+  else if (maxErr[0] === 'forgot' || maxErr[0] === 'zero-blank') patternNote = 'Your biggest issue is <strong>knowledge gaps</strong> — there are topics you need to relearn, not just review.';
+  else if (maxErr[0] === 'misunderstood' || maxErr[0] === 'zero-tried') patternNote = 'Your biggest issue is <strong>reading and interpreting questions</strong> — re-read each question twice before starting.';
+  else patternNote = 'You have a mix of knowledge gaps and execution errors — work topic by topic below.';
+
+  let planHtml = `<p style="margin-bottom:12px">${patternNote}</p>`;
+
+  if (top3.length === 0) {
+    planHtml += '<p>Great work — you reflected as correct or close on most questions. Focus on maintaining accuracy under pressure.</p>';
+  } else {
+    planHtml += '<p style="margin-bottom:10px"><strong>Your top priority topics:</strong></p>';
+    top3.forEach(([topic, data], i) => {
+      const dominantCat = data.cats.sort((a,b) =>
+        data.cats.filter(x=>x===b).length - data.cats.filter(x=>x===a).length)[0];
+      let advice = '';
+      if (['forgot','zero-blank'].includes(dominantCat)) advice = 'Reteach yourself from scratch — look for examples and work through several problems from the beginning.';
+      else if (['misunderstood','zero-tried'].includes(dominantCat)) advice = 'Practice reading the question carefully. Try restating each problem in your own words before solving.';
+      else advice = 'You have the concept — practice a few more problems and check each step carefully.';
+      planHtml += `<div style="margin:10px 0;padding:12px;background:var(--cream);border-radius:4px;border-left:3px solid var(--ink)">
+        <strong>#${i+1}: ${topic}</strong> (${data.count} question${data.count>1?'s':''})<br>
+        <span style="font-size:.85rem;color:#444">${advice}</span>
+        ${data.reflections.length ? `<div style="font-size:.8rem;color:var(--muted);margin-top:6px;font-style:italic">You wrote: "${data.reflections[0]}"</div>` : ''}
+      </div>`;
+    });
+  }
+
+  document.getElementById('planContent').innerHTML = planHtml;
+
+  // Build AI prompt
+  const promptLines = [
+    `I'm an Algebra I student preparing for the New York State Regents exam.`,
+    `I just reflected on my ${currentExam} practice Regents exam.`,
+    `My estimated score is ${scaled}/100 (raw: ${raw}).`,
+    ``,
+    `Here are my weakest topics based on my self-assessment:`,
+    ...sorted.slice(0,4).map((([t,d],i) => `${i+1}. ${t} — I got ${d.count} question(s) wrong in this area`)),
+    ``,
+    `My main error pattern: ${maxErr[0].replace(/-/g,' ')} (I tend to ${maxErr[0].includes('error')||maxErr[0].includes('close') ? 'make careless mistakes' : maxErr[0].includes('blank')||maxErr[0].includes('forgot') ? 'forget how to approach these problems' : 'misunderstand what the question is asking'}).`,
+  ];
+
+  if (sorted.length > 0) {
+    const [t1, d1] = sorted[0];
+    promptLines.push(``, `Here is something I wrote about my biggest weakness (${t1}): "${d1.reflections[0] || 'no additional notes'}"`);
+  }
+
+  promptLines.push(
+    ``,
+    `Please help me with the following:`,
+    `1. Give me 3 practice problems for each of my top 2 weakest topics.`,
+    `2. For each problem, give me a hint I can use if I get stuck (but don't show the full solution yet).`,
+    `3. After I attempt the problems, I can photograph my work and share it with you — please look at it carefully and tell me specifically what I did right and what I need to fix.`,
+    `4. Based on my error pattern, give me one concrete strategy I can use on the actual exam to avoid losing points.`,
+  );
+
+  document.getElementById('promptText').textContent = promptLines.join('\n');
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// ── NAV ──────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
+buildExamGrid();
+</script>
+</body>
+</html>
