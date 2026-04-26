@@ -7,29 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:    #1c1c2e;
-  --paper:  #faf9f5;
-  --cream:  #f0ece0;
-  --rule:   #ddd8c8;
-  --accent: #b83232;
-  --green:  #1a6b3c;
-  --green-s:#e6f4ed;
-  --amber:  #b86a0a;
-  --amber-s:#fef3e2;
-  --blue:   #1a3d6b;
-  --blue-s: #e6eef8;
-  --purple: #5b2d8e;
-  --purple-s:#f0eaf8;
-  --red-s:  #fceaea;
-  --muted:  #7a7a8c;
-  --r: 4px;
+  --ink:#1c1c2e; --paper:#faf9f5; --cream:#f0ece0; --rule:#ddd8c8;
+  --accent:#b83232; --green:#1a6b3c; --green-s:#e6f4ed;
+  --amber:#b86a0a; --amber-s:#fef3e2; --blue:#1a3d6b; --blue-s:#e6eef8;
+  --purple:#5b2d8e; --purple-s:#f0eaf8; --red-s:#fceaea; --muted:#7a7a8c; --r:4px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;
   background-image:repeating-linear-gradient(transparent,transparent 27px,var(--rule) 27px,var(--rule) 28px);
   background-attachment:fixed}
 
-/* ── HEADER ── */
 .hdr{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.3)}
 .hdr-inner{max-width:800px;margin:0 auto;padding:16px 24px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .hdr-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700}
@@ -37,62 +24,56 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 .prog-wrap{height:3px;background:#2c2c4a}
 .prog-bar{height:3px;background:var(--accent);transition:width .4s ease;width:0%}
 
-/* ── SCREENS ── */
 .screen{display:none;max-width:800px;margin:0 auto;padding:40px 24px 100px}
 .screen.active{display:block}
 
-/* ── CARDS ── */
 .card{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:32px;
   margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .card h2{font-family:'Playfair Display',serif;font-size:1.45rem;margin-bottom:12px}
 .card p{font-size:.93rem;line-height:1.75;color:#333;margin-bottom:10px}
 .card p:last-child{margin-bottom:0}
 
-/* ── EXAM SELECTOR ── */
-.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
-.exam-btn{padding:18px 16px;border:2px solid var(--rule);border-radius:var(--r);
-  background:var(--paper);cursor:pointer;text-align:left;transition:all .18s;font-family:'DM Sans',sans-serif}
-.exam-btn:hover{border-color:var(--ink);background:var(--cream)}
-.exam-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--paper)}
-.exam-btn .eb-date{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;display:block}
-.exam-btn .eb-note{font-size:.75rem;margin-top:4px;opacity:.7;display:block;font-style:italic}
+/* SELECT GRIDS */
+.select-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.sel-btn{padding:14px 16px;border:2px solid var(--rule);border-radius:var(--r);
+  background:var(--paper);cursor:pointer;text-align:left;transition:all .18s;
+  font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--ink)}
+.sel-btn:hover{border-color:var(--ink);background:var(--cream)}
+.sel-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.sel-btn .sb-main{font-weight:500;display:block}
+.sel-btn .sb-sub{font-size:.75rem;opacity:.65;display:block;margin-top:3px;font-style:italic}
 
-/* ── FORM FIELDS ── */
-.field-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
-.field{flex:1;min-width:140px}
-.field label{display:block;font-family:'DM Mono',monospace;font-size:.7rem;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-input[type=text]{width:100%;padding:10px 14px;border:1px solid var(--rule);border-radius:var(--r);
-  font-family:'DM Sans',sans-serif;font-size:.98rem;background:var(--paper);color:var(--ink);outline:none;transition:border-color .2s}
-input[type=text]:focus{border-color:var(--ink);background:#fff}
+/* name grid - 3 col on desktop */
+.name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:12px}
 
-/* ── START BTN ── */
 .btn-primary{background:var(--ink);color:var(--paper);border:none;padding:13px 32px;
   font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:500;border-radius:var(--r);
-  cursor:pointer;letter-spacing:.02em;transition:all .2s;margin-top:24px}
+  cursor:pointer;letter-spacing:.02em;transition:all .2s;margin-top:20px;display:inline-block}
 .btn-primary:hover{background:var(--accent);transform:translateY(-1px)}
 .btn-primary:disabled{background:var(--muted);cursor:not-allowed;transform:none}
 
-/* ── EXAM NOTES BANNER ── */
+.err{color:var(--accent);font-size:.84rem;margin-top:8px;display:none}
+.loading-msg{color:var(--muted);font-style:italic;font-size:.88rem;margin-top:8px}
+
+/* EXAM NOTICE */
 .exam-notice{background:var(--amber-s);border:1px solid var(--amber);border-radius:var(--r);
   padding:14px 18px;margin-bottom:28px;font-size:.86rem;line-height:1.65;color:#5a3a00}
-.exam-notice strong{display:block;margin-bottom:4px;font-size:.8rem;font-family:'DM Mono',monospace;
-  letter-spacing:.06em;text-transform:uppercase}
+.exam-notice strong{display:block;margin-bottom:4px;font-size:.78rem;
+  font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
 
-/* ── PART DIVIDER ── */
+/* PART DIVIDER */
 .part-hdr{display:flex;align-items:center;gap:14px;margin:44px 0 18px}
 .part-tag{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;
-  text-transform:uppercase;color:#fff;background:var(--ink);padding:4px 10px;border-radius:2px;white-space:nowrap}
+  text-transform:uppercase;color:#fff;background:var(--ink);padding:4px 10px;border-radius:2px}
 .part-name{font-family:'Playfair Display',serif;font-size:1.05rem}
 .part-rule{flex:1;height:1px;background:var(--rule)}
 .part-pts{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)}
 
-/* ── QUESTION CARD ── */
+/* QUESTION CARDS */
 .qcard{background:#fff;border:1px solid var(--rule);border-radius:var(--r);
   margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
 .qcard:hover{box-shadow:0 3px 16px rgba(0,0,0,.09)}
 .qcard.done{border-left:3px solid var(--green)}
-.qcard.flagged{opacity:.6}
 
 .q-head{display:flex;align-items:flex-start;gap:14px;padding:18px 20px 14px;cursor:pointer;user-select:none}
 .q-num{font-family:'DM Mono',monospace;font-size:.7rem;background:var(--cream);
@@ -104,10 +85,8 @@ input[type=text]:focus{border-color:var(--ink);background:#fff}
 .flag-banner{padding:8px 20px;background:var(--amber-s);font-size:.8rem;
   color:#5a3a00;border-bottom:1px solid #f0d090;font-style:italic}
 
-/* score chips for FR questions */
-.score-row{padding:0 20px 14px;border-bottom:1px solid var(--cream);display:flex;align-items:center;gap:10px}
-.score-lbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.score-row{padding:0 20px 14px;border-bottom:1px solid var(--cream);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score-lbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{padding:4px 11px;border:1px solid var(--rule);border-radius:20px;
   font-family:'DM Mono',monospace;font-size:.78rem;cursor:pointer;background:var(--paper);
@@ -115,37 +94,31 @@ input[type=text]:focus{border-color:var(--ink);background:#fff}
 .chip:hover{border-color:var(--ink);color:var(--ink)}
 .chip.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-/* ── BODY (expandable) ── */
 .q-body{padding:14px 20px 18px;border-top:1px solid var(--cream)}
-
-.cat-lbl,.step-lbl,.ref-lbl{font-family:'DM Mono',monospace;font-size:.68rem;
+.cat-lbl,.ref-lbl{font-family:'DM Mono',monospace;font-size:.68rem;
   letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.step-lbl{margin-top:14px}
 .ref-lbl{margin-top:14px}
 
-.cats{display:flex;flex-direction:column;gap:6px;margin-bottom:0}
+.cats{display:flex;flex-direction:column;gap:6px}
 .cat{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;border:1px solid var(--rule);
   border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--paper)}
 .cat:hover{background:var(--cream)}
-.cat-dot{width:15px;height:15px;border:2px solid var(--rule);border-radius:50%;flex-shrink:0;
-  margin-top:2px;transition:all .15s;position:relative}
+.cat-dot{width:15px;height:15px;border:2px solid var(--rule);border-radius:50%;
+  flex-shrink:0;margin-top:2px;transition:all .15s;position:relative}
 .cat.sel .cat-dot{border-color:var(--ink);background:var(--ink)}
 .cat.sel .cat-dot::after{content:'';position:absolute;width:5px;height:5px;background:#fff;
   border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
-.cat-text{font-size:.86rem;line-height:1.4}
-.cat-text em{display:block;font-size:.76rem;color:var(--muted);font-style:normal;margin-top:1px}
+.cat-txt{font-size:.86rem;line-height:1.4}
+.cat-txt em{display:block;font-size:.76rem;color:var(--muted);font-style:normal;margin-top:1px}
 
-/* color-code selected cats */
 .cat.sel[data-v="correct"],.cat.sel[data-v="full"]{background:var(--green-s);border-color:var(--green)}
 .cat.sel[data-v="guess"],.cat.sel[data-v="partial-close"]{background:var(--amber-s);border-color:var(--amber)}
 .cat.sel[data-v="small-error"],.cat.sel[data-v="partial-gap"]{background:var(--blue-s);border-color:var(--blue)}
 .cat.sel[data-v="misunderstood"],.cat.sel[data-v="zero-tried"]{background:var(--purple-s);border-color:var(--purple)}
 .cat.sel[data-v="forgot"],.cat.sel[data-v="zero-blank"]{background:var(--red-s);border-color:var(--accent)}
 
-/* only show reflection box for non-correct */
 .ref-wrap{display:none}
 .ref-wrap.show{display:block}
-
 textarea{width:100%;padding:9px 13px;border:1px solid var(--rule);border-radius:var(--r);
   font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.6;color:var(--ink);
   background:var(--paper);resize:vertical;min-height:66px;outline:none;transition:border-color .2s}
@@ -156,50 +129,48 @@ textarea::placeholder{color:#aaa;font-style:italic}
   border:none;background:none;cursor:pointer;margin-top:10px;text-decoration:underline}
 .collapse-btn:hover{color:var(--ink)}
 
-/* ── SUBMIT SECTION ── */
+/* SUBMIT */
 .submit-wrap{margin-top:50px;padding-top:28px;border-top:2px solid var(--ink)}
 .submit-wrap h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:6px}
 .submit-wrap p{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:20px}
-.err{color:var(--accent);font-size:.84rem;margin-top:8px;display:none}
 
-/* ── SUCCESS / STUDY PLAN ── */
+/* SUCCESS */
 .success{background:var(--green-s);border:1px solid var(--green);border-radius:var(--r);
   padding:28px;margin-top:24px;display:none}
 .success h3{font-family:'Playfair Display',serif;color:var(--green);font-size:1.3rem;margin-bottom:8px}
-.success p{font-size:.9rem;line-height:1.7;margin-bottom:8px}
 
-.plan-box{background:#fff;border:1px solid var(--rule);border-radius:var(--r);
-  padding:24px;margin-top:20px}
-.plan-box h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:12px}
-.plan-loading{color:var(--muted);font-style:italic;font-size:.9rem}
-
-.prompt-box{background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
-  padding:16px;margin-top:16px;font-family:'DM Mono',monospace;font-size:.76rem;
-  line-height:1.7;white-space:pre-wrap;word-break:break-word;position:relative}
-.copy-btn{position:absolute;top:10px;right:10px;background:var(--ink);color:#fff;
-  border:none;padding:5px 12px;border-radius:2px;font-family:'DM Mono',monospace;
-  font-size:.7rem;cursor:pointer;transition:background .15s}
-.copy-btn:hover{background:var(--accent)}
-
-/* ── SCORE SUMMARY ── */
 .score-summary{background:var(--ink);color:var(--paper);border-radius:var(--r);
-  padding:20px 24px;margin-top:20px;display:flex;gap:32px;flex-wrap:wrap;align-items:center}
+  padding:20px 24px;margin:16px 0;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .ss-item{text-align:center}
-.ss-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;display:block}
-.ss-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.07em;
+.ss-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;display:block}
+.ss-label{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.07em;
   text-transform:uppercase;opacity:.7;display:block;margin-top:2px}
 
-/* ── FLOAT ── */
+.plan-box{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:24px;margin-top:16px}
+.plan-box h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:14px}
+.plan-content{font-size:.92rem;line-height:1.8}
+.plan-content p{margin-bottom:10px}
+.plan-content strong{color:var(--ink)}
+.plan-loading{color:var(--muted);font-style:italic;font-size:.9rem;padding:20px 0;text-align:center}
+.plan-loading::after{content:'';animation:dots 1.4s infinite;display:inline-block}
+@keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
+
+.prompt-box{background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
+  padding:16px;margin-top:12px;font-family:'DM Mono',monospace;font-size:.76rem;
+  line-height:1.75;white-space:pre-wrap;word-break:break-word;position:relative;max-height:320px;overflow-y:auto}
+.copy-btn{position:sticky;top:0;float:right;background:var(--ink);color:#fff;
+  border:none;padding:5px 12px;border-radius:2px;font-family:'DM Mono',monospace;
+  font-size:.7rem;cursor:pointer;transition:background .15s;margin-bottom:8px}
+.copy-btn:hover{background:var(--accent)}
+
 .float{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--paper);
   padding:9px 16px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;
-  box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:none;opacity:.92}
+  box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:none;opacity:.92;z-index:100}
 
 @media(max-width:600px){
-  .exam-grid{grid-template-columns:1fr}
+  .select-grid{grid-template-columns:1fr}
   .screen{padding:24px 14px 80px}
-  .q-head{padding:14px 14px 10px}
-  .q-body{padding:12px 14px 14px}
-  .score-row{padding:0 14px 12px}
+  .q-head,.q-body,.score-row{padding-left:14px;padding-right:14px}
   .score-summary{gap:16px}
 }
 </style>
@@ -218,30 +189,30 @@ textarea::placeholder{color:#aaa;font-style:italic}
 <div class="screen active" id="screenSetup">
   <div class="card" style="border-top:4px solid var(--accent)">
     <h2>Welcome.</h2>
-    <p>Your teacher has already scored your written responses. For each question, you'll reflect on what happened and what you'll do next. Keep your paper exam in front of you.</p>
-    <p>Be honest — this data is used to build a personalized study plan just for you.</p>
+    <p>Your teacher has already scored your written responses. For each question, you'll reflect on what happened. Keep your paper exam in front of you.</p>
+    <p>When you submit, you'll receive your estimated score and a personalized study plan generated just for you.</p>
+  </div>
+
+  <div class="card">
+    <h2>Select your name</h2>
+    <p style="color:var(--muted);font-size:.85rem">Don't see your name? Ask your teacher.</p>
+    <div class="name-grid" id="nameGrid">
+      <p class="loading-msg">Loading class roster…</p>
+    </div>
   </div>
 
   <div class="card">
     <h2>Which exam are you reflecting on?</h2>
-    <div class="exam-grid" id="examGrid"></div>
+    <div class="select-grid" id="examGrid">
+      <button class="sel-btn" onclick="selectExam('June 2022',this)"><span class="sb-main">June 2022</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2023',this)"><span class="sb-main">June 2023</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2024',this)"><span class="sb-main">June 2024</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2025',this)"><span class="sb-main">June 2025</span><span class="sb-sub">Algebra I Regents</span></button>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Your name</h2>
-    <div class="field-row">
-      <div class="field">
-        <label>First Name</label>
-        <input type="text" id="firstName" placeholder="e.g. Jordan" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>Last Initial</label>
-        <input type="text" id="lastInitial" placeholder="e.g. M" maxlength="2" autocomplete="off">
-      </div>
-    </div>
-    <button class="btn-primary" id="startBtn" onclick="startExam()">Start Reflection →</button>
-    <p class="err" id="setupErr"></p>
-  </div>
+  <button class="btn-primary" id="startBtn" onclick="startExam()">Start Reflection →</button>
+  <p class="err" id="setupErr"></p>
 </div>
 
 <!-- ══ SCREEN 2: QUESTIONS ══ -->
@@ -250,24 +221,22 @@ textarea::placeholder{color:#aaa;font-style:italic}
   <div id="qContainer"></div>
   <div class="submit-wrap">
     <h3>Ready to submit?</h3>
-    <p>Once you submit, your reflection is sent to your teacher and you'll receive your estimated score and a personalized study plan.</p>
+    <p>Once you submit, your reflection is saved and your personalized study plan will generate. This takes about 15 seconds.</p>
     <button class="btn-primary" id="submitBtn" onclick="submitReflection()">Submit My Reflection</button>
     <p class="err" id="submitErr"></p>
   </div>
   <div class="success" id="successPanel">
     <h3>Reflection submitted ✓</h3>
-    <p>Here's your estimated score and a personalized study plan based on your responses.</p>
+    <p>Here's your estimated score and study plan.</p>
     <div class="score-summary" id="scoreSummary"></div>
     <div class="plan-box">
-      <h4>Your Study Plan</h4>
-      <div id="planContent"><p class="plan-loading">Generating your personalized plan…</p></div>
+      <h4>Your Personalized Study Plan</h4>
+      <div class="plan-content" id="planContent"><div class="plan-loading">Generating your study plan</div></div>
     </div>
     <div class="plan-box" style="margin-top:16px">
-      <h4>AI Tutor Prompt — copy and paste this into any AI</h4>
-      <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px">
-        Paste this into Claude, ChatGPT, or any AI assistant to get personalized practice problems and feedback. You can also take a photo of your work and upload it for even more specific help.
-      </p>
-      <div class="prompt-box" id="promptBox">
+      <h4>AI Tutor Prompt</h4>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:10px">Copy this and paste it into Claude, ChatGPT, or any AI. You can also photograph your exam work and upload it for even more specific feedback.</p>
+      <div class="prompt-box">
         <button class="copy-btn" onclick="copyPrompt()">Copy</button>
         <span id="promptText"></span>
       </div>
@@ -277,121 +246,387 @@ textarea::placeholder{color:#aaa;font-style:italic}
 
 <div class="float" id="floatProg">0 / 0 reflected</div>
 
-<script src="examData.js"></script>
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJl41WD_zZsoPHdfR3F7-wClpWpiXVMnQSwB8GbqusfxqbhSsS3h1RJ5Lhz_bsmNd2/exec'; // paste your Apps Script URL here after setup
+// ══════════════════════════════════════════════════════════════════
+// CONFIG — paste your Apps Script URL here after setup
+// ══════════════════════════════════════════════════════════════════
+const SCRIPT_URL = '';
 
-// ── MC CATEGORIES ───────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+// CONVERSION CHARTS
+// ══════════════════════════════════════════════════════════════════
+const CONVERSION_CHARTS = {
+  "June 2022":{maxRaw:86,chart:{86:100,85:99,84:97,83:96,82:95,81:94,80:93,79:92,78:91,77:90,76:89,75:88,74:88,73:87,72:86,71:86,70:86,69:85,68:84,67:84,66:84,65:83,64:83,63:83,62:82,61:82,60:82,59:81,58:81,57:81,56:81,55:80,54:80,53:80,52:80,51:79,50:79,49:79,48:78,47:78,46:78,45:77,44:77,43:77,42:76,41:76,40:75,39:75,38:74,37:74,36:73,35:72,34:72,33:71,32:70,31:69,30:68,29:67,28:66,27:65,26:64,25:63,24:61,23:60,22:59,21:57,20:56,19:55,18:52,17:50,16:48,15:46,14:44,13:42,12:40,11:37,10:34,9:32,8:29,7:26,6:23,5:19,4:16,3:12,2:8,1:4,0:0}},
+  "June 2023":{maxRaw:86,chart:{86:100,85:99,84:97,83:96,82:95,81:94,80:93,79:92,78:91,77:90,76:89,75:89,74:88,73:87,72:87,71:86,70:86,69:86,68:85,67:84,66:84,65:83,64:83,63:83,62:82,61:82,60:82,59:82,58:81,57:81,56:81,55:80,54:80,53:80,52:80,51:79,50:79,49:79,48:78,47:78,46:78,45:77,44:77,43:77,42:76,41:76,40:75,39:75,38:74,37:74,36:73,35:72,34:72,33:71,32:70,31:69,30:68,29:67,28:66,27:65,26:64,25:63,24:62,23:60,22:59,21:58,20:56,19:55,18:53,17:51,16:49,15:47,14:45,13:43,12:40,11:38,10:35,9:32,8:30,7:26,6:23,5:20,4:16,3:13,2:9,1:4,0:0}},
+  "June 2024":{maxRaw:82,chart:{82:100,81:99,80:98,79:96,78:95,77:94,76:92,75:91,74:90,73:89,72:88,71:87,70:86,69:85,68:84,67:84,66:83,65:83,64:82,63:81,62:81,61:80,60:79,59:79,58:78,57:78,56:77,55:77,54:76,53:76,52:75,51:75,50:75,49:74,48:74,47:73,46:73,45:72,44:72,43:72,42:71,41:71,40:70,39:70,38:69,37:69,36:69,35:68,34:68,33:67,32:67,31:66,30:66,29:65,28:64,27:64,26:63,25:62,24:61,23:61,22:60,21:59,20:58,19:56,18:55,17:54,16:52,15:50,14:49,13:47,12:44,11:42,10:40,9:37,8:34,7:31,6:27,5:23,4:19,3:15,2:10,1:5,0:0}},
+  "June 2025":{maxRaw:82,chart:{82:100,81:99,80:97,79:95,78:94,77:92,76:91,75:90,74:89,73:88,72:87,71:86,70:85,69:84,68:84,67:83,66:82,65:82,64:81,63:81,62:80,61:80,60:79,59:79,58:78,57:78,56:77,55:77,54:76,53:76,52:75,51:75,50:74,49:74,48:74,47:73,46:73,45:72,44:72,43:71,42:71,41:71,40:70,39:70,38:69,37:69,36:68,35:68,34:67,33:67,32:66,31:66,30:66,29:65,28:64,27:63,26:63,25:62,24:61,23:60,22:59,21:58,20:57,19:56,18:55,17:54,16:52,15:51,14:49,13:47,12:45,11:43,10:40,9:38,8:35,7:32,6:28,5:25,4:21,3:16,2:11,1:6,0:0}},
+};
+
+// ══════════════════════════════════════════════════════════════════
+// EXAM DATA
+// ══════════════════════════════════════════════════════════════════
+const T = {
+  LEQ:"Linear Equations & Inequalities", LFN:"Linear Functions & Modeling",
+  SYS:"Systems of Equations & Inequalities", QD:"Quadratic Functions & Equations",
+  QF:"Factoring", QCS:"Quadratic Formula / Completing the Square",
+  EXP:"Exponential Functions", POL:"Polynomials", STA:"Statistics & Data Analysis",
+  REG:"Linear Regression", SEQ:"Sequences", REC:"Recursive Sequences (no longer assessed)",
+  FUN:"Functions — Domain, Range & Notation", TRN:"Function Transformations",
+  RAT:"Rational & Irrational Numbers", ROC:"Rate of Change & Unit Conversion", GR:"Graphing",
+};
+
+const EXAMS = {
+  "June 2022":{
+    maxRaw:86,
+    notes:"Questions 26 and 35 cover topics not yet taught (transformations and regression). Question 24 covers recursive sequences, no longer assessed. These are excluded from your score.",
+    parts:[
+      {id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[
+        {n:1,text:"Which correlation shows a causal relationship?",topic:T.STA},
+        {n:2,text:"Given f(x) = 3x − 5, which statement is true?",topic:T.LFN},
+        {n:3,text:"Benny's Café: salad $5.75, each topping $0.75. Which function gives cost c(s)?",topic:T.LFN},
+        {n:4,text:"Which expression is equivalent to x² − 5x + 6?",topic:T.QF},
+        {n:5,text:"Peter has $100 for drinks. Lemonade $2, juice $0.50 each. Which inequality models this?",topic:T.LEQ},
+        {n:6,text:"Which domain is most appropriate for number of items placed in a laundry basket each day in January?",topic:T.FUN},
+        {n:7,text:"What is the solution to ³⁄₂b − 5 = 17?",topic:T.LEQ},
+        {n:8,text:"Which table of values represents an exponential relationship?",topic:T.EXP},
+        {n:9,text:"Which expression is NOT equivalent to (5²ˣ)³?",topic:T.POL},
+        {n:10,text:"Which relation is a function?",topic:T.FUN},
+        {n:11,text:"Ax + By = C: which expression represents y in terms of A, B, C, and x?",topic:T.LEQ},
+        {n:12,text:"What are the zeros of f(x) = (2x + 4)(3x − 4)?",topic:T.QD},
+        {n:13,text:"Joe has dimes and nickels totaling $1.45. Nickels = 5 more than twice the dimes. Which equation finds number of dimes?",topic:T.LEQ},
+        {n:14,text:"Donna and Andrew compare exam scores grade 8–12. Which statement is correct?",topic:T.STA},
+        {n:15,text:"First term of sequence is 5, fifth term is 17. What is the common difference?",topic:T.SEQ},
+        {n:16,text:"Quadratic and linear function graphed together — which intersection situation is NOT possible?",topic:T.GR},
+        {n:17,text:"The expression (m − 3)² is equivalent to?",topic:T.POL},
+        {n:18,text:"Three students explain why (3,4) solves 2y − 3x = 1. Which are correct?",topic:T.LFN},
+        {n:19,text:"Four quadratic functions shown. Which statement about their maximums is true?",topic:T.QD},
+        {n:20,text:"Which is a sixth-degree polynomial with leading coefficient 7 and constant term 4?",topic:T.POL},
+        {n:21,text:"A = P(1 + r)ᵗ — which statement correctly interprets the annual interest rate?",topic:T.EXP},
+        {n:22,text:"Tim runs 50 km in 4.5 hours. Which expression converts this to minutes per mile?",topic:T.ROC},
+        {n:23,text:"Solve x/a + (a−1)/4 = 3/4 for x in terms of a.",topic:T.LEQ},
+        {n:24,text:"Sequence: a₁ = 3, aₙ = 3aₙ₋₁ − 2. What is a₄?",topic:T.REC,flag:"not-assessed",flagNote:"Recursive sequences are no longer assessed. Excluded from your score."},
+      ]},
+      {id:"II",title:"Short Answer",credits:2,partial:true,questions:[
+        {n:25,text:"Is the product of √1024 and 3.4 rational or irrational? Explain.",topic:T.RAT},
+        {n:26,text:"Describe the transformations on f(x) = x² to obtain g(x) = (x + 3)² − 4.",topic:T.TRN,flag:"not-yet-taught",flagNote:"Function transformations not yet taught. Excluded from your score."},
+        {n:27,text:"Garage sale profit graph. Find the average rate of change (dollars/hour) over 1 ≤ x ≤ 4.",topic:T.ROC},
+        {n:28,text:"Subtract 3x(x − 2y) from 6(x² + xy) and express as a monomial.",topic:T.POL},
+        {n:29,text:"State the domain and range of the graphed function.",topic:T.FUN},
+        {n:30,text:"Solve 6x² − 5x − 6 = 0 algebraically for the exact values of x.",topic:T.QCS},
+        {n:31,text:"Factor x⁴ − 36x² completely.",topic:T.QF},
+        {n:32,text:"Find exact values of x for x² − 8x + 5 = 0 by completing the square.",topic:T.QCS},
+      ]},
+      {id:"III",title:"Extended Response",credits:4,partial:true,questions:[
+        {n:33,text:"Kite height graph — explain zeros in context, state increasing intervals, state maximum height.",topic:T.GR},
+        {n:34,text:"Graph f(x) = |x² − 1| and g(x) = 3x. For how many x does f(x) = g(x)? Explain.",topic:T.GR},
+        {n:35,text:"Driver age vs. speeding accidents. Write linear regression equation and interpret correlation coefficient.",topic:T.REG,flag:"not-yet-taught",flagNote:"Linear regression not yet taught. Excluded from your score."},
+        {n:36,text:"Solve system of inequalities graphically. Is (0,3) a solution? Justify.",topic:T.SYS},
+      ]},
+      {id:"IV",title:"Extended Response",credits:6,partial:true,questions:[
+        {n:37,text:"Amusement park tickets: write system of equations, solve algebraically, find cost for group of 4 with 3 children.",topic:T.SYS},
+      ]},
+    ]
+  },
+  "June 2023":{
+    maxRaw:86,
+    notes:"Questions 21 covers recursive sequences, a standard no longer assessed in Algebra I. It is excluded from your score.",
+    parts:[
+      {id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[
+        {n:1,text:"Which expression is equivalent to 9m² − 100?",topic:T.QF},
+        {n:2,text:"Which expression represents an irrational number?",topic:T.RAT},
+        {n:3,text:"Which linear equation represents a line passing through (−3, −8)?",topic:T.LFN},
+        {n:4,text:"(5x² − x + 4) − 3(x² − x − 2) is equivalent to?",topic:T.POL},
+        {n:5,text:"The 24th term of the sequence −5, −11, −17, −23, … is?",topic:T.SEQ},
+        {n:6,text:"When completing the square for x² − 18x + 77 = 0, which equation is a correct step?",topic:T.QCS},
+        {n:7,text:"Which function has the greatest value when x > 1?",topic:T.EXP},
+        {n:8,text:"In b = 1300(2.65)ˣ, the exponent represents?",topic:T.EXP},
+        {n:9,text:"Company ships 30,000 items/week. Which expression gives items per minute?",topic:T.ROC},
+        {n:10,text:"Graph has double root at x = 2, single root at x = −3. A possible equation is?",topic:T.QD},
+        {n:11,text:"If g(x) = −x² − x + 5, then g(−4) equals?",topic:T.FUN},
+        {n:12,text:"Popcorn box 6×4×8 in. Length and width each increase by x. Which function gives volume V(x)?",topic:T.POL},
+        {n:13,text:"The expression 300(4)^(x+3) is equivalent to?",topic:T.EXP},
+        {n:14,text:"Ashley has 7 quarters and dimes, needs at least $3.00. Which inequality finds dimes d needed?",topic:T.LEQ},
+        {n:15,text:"Trapezoid area A = ½(b₁+b₂)h. Which expression gives height h?",topic:T.LEQ},
+        {n:16,text:"g(x) = k|x| with k = ½. Which statement is true comparing f(x) = |x| and g(x)?",topic:T.TRN},
+        {n:17,text:"240 adults chose SUV or sports car. Of those preferring sports cars, approximately what percent were male?",topic:T.STA},
+        {n:18,text:"The solution to 2x² = 72 is?",topic:T.QD},
+        {n:19,text:"Three quadratic functions given in different forms. Which have the same vertex?",topic:T.QD},
+        {n:20,text:"The domain of f(x) = x² + x − 12 is?",topic:T.FUN},
+        {n:21,text:"Father pays son allowance: year 1 = $10, each year = 2× previous − $8. Which recursive formula works?",topic:T.REC,flag:"not-assessed",flagNote:"Recursive sequences are no longer assessed. Excluded from your score."},
+        {n:22,text:"What is the solution to 4 − (2/5)x ≥ (1/3)x + 15?",topic:T.LEQ},
+        {n:23,text:"Which statement is correct about the polynomial 3x² + 5x − 2?",topic:T.POL},
+        {n:24,text:"p(n) models a store's profit from selling n boxes of nails. A reasonable domain would be?",topic:T.FUN},
+      ]},
+      {id:"II",title:"Short Answer",credits:2,partial:true,questions:[
+        {n:25,text:"Solve algebraically: −2.4(x + 1.4) = 6.8x − 22.68",topic:T.LEQ},
+        {n:26,text:"State the zeros of f(x) from the graph. Explain your reasoning.",topic:T.QD},
+        {n:27,text:"Breanna's block pattern — friend says it grows exponentially. Is the friend correct? Explain.",topic:T.EXP},
+        {n:28,text:"Data: 20,36,52,56,24,16,40,4,28 books purchased. Construct a box plot.",topic:T.STA},
+        {n:29,text:"Given A = x + 5 and B = x² − 18, express A² + B in standard form.",topic:T.POL},
+        {n:30,text:"Two relations are not functions. Explain how to change each so they become functions.",topic:T.FUN},
+        {n:31,text:"Factor 2x² + 16x − 18 completely.",topic:T.QF},
+        {n:32,text:"Solve 3d² − 8d + 3 = 0 algebraically, rounding to the nearest tenth.",topic:T.QCS},
+      ]},
+      {id:"III",title:"Extended Response",credits:4,partial:true,questions:[
+        {n:33,text:"Graph f(x) = |x| + 1 and g(x) = −x² + 6x + 1. Determine all x where f(x) = g(x).",topic:T.GR},
+        {n:34,text:"Temperature data over 24 hours. State increasing intervals, greatest 3-hour rate of change, and average rate from hour 12 to 24. Interpret in context.",topic:T.ROC},
+        {n:35,text:"Solve system of inequalities graphically: 2x + 3y ≥ −6 and x < 3y + 6. Is (4,−2) in solution set? Explain.",topic:T.SYS},
+        {n:36,text:"Height and weight data for 7 animals. Write linear regression equation. State and interpret correlation coefficient.",topic:T.REG},
+      ]},
+      {id:"IV",title:"Extended Response",credits:6,partial:true,questions:[
+        {n:37,text:"Dana bought roses and daisies on two days. Write system of equations, solve algebraically, find savings at sale prices.",topic:T.SYS},
+      ]},
+    ]
+  },
+  "June 2024":{
+    maxRaw:82,
+    notes:"All questions on this exam cover taught content. No questions are excluded from scoring.",
+    parts:[
+      {id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[
+        {n:1,text:"Ball launched into air — height recorded each second. Which statement is a valid conclusion?",topic:T.QD},
+        {n:2,text:"Tour bus: ≤48 passengers, adult $18, child $12, need ≥$650. Which system of inequalities models this?",topic:T.SYS},
+        {n:3,text:"Which equation is always true?",topic:T.POL},
+        {n:4,text:"−2(x² − 2x + 1) + (3x² + 3x − 5) is equivalent to?",topic:T.POL},
+        {n:5,text:"Which sum is irrational?",topic:T.RAT},
+        {n:6,text:"Solve 4(x − 5)/3 + 2 = 14.",topic:T.LEQ},
+        {n:7,text:"Rabbit population doubled each month for two years. Which function type best models this?",topic:T.EXP},
+        {n:8,text:"In b = 1300(2.65)ˣ, the exponent represents?",topic:T.EXP},
+        {n:9,text:"30,000 items shipped per week. Which expression gives items per minute?",topic:T.ROC},
+        {n:10,text:"Graph shows double root at x = 2, single root at x = −3. A possible equation is?",topic:T.QD},
+        {n:11,text:"Nancy's salary options over 8 years. Which pay plan gives the highest salary in year 8?",topic:T.EXP},
+        {n:12,text:"3rd term of sequence is 25, 5th term is 625. Which could be the common ratio?",topic:T.SEQ},
+        {n:13,text:"Box plot of snowfall for 12 locations. What is the interquartile range?",topic:T.STA},
+        {n:14,text:"Four quadratic functions in different representations. Which has the smallest minimum value?",topic:T.QD},
+        {n:15,text:"Which equation represents the sequence −2, −5, −8, −11, −14, …?",topic:T.SEQ},
+        {n:16,text:"Dot plot of Jessica's lacrosse goals. Which statement about mean, median, mode is correct?",topic:T.STA},
+        {n:17,text:"g(x) = 2(x − 3)² compared to f(x) = x². Which student description is correct?",topic:T.TRN},
+        {n:18,text:"Dave's bike ride graph. What was his average rate of change in miles per hour?",topic:T.ROC},
+        {n:19,text:"(x − 5)(2x + 7) − (x + 5) is equivalent to?",topic:T.POL},
+        {n:20,text:"f(x) and g(x) graphed together. What is the solution to f(x) = g(x)?",topic:T.GR},
+        {n:21,text:"Nicole's babysitting: C(h) = 6h + 5. The constant term represents?",topic:T.LFN},
+        {n:22,text:"Solve 3x − 7 = ax + 5 for x in terms of a.",topic:T.LEQ},
+        {n:23,text:"Wayde van Niekerk ran 400m in 43.03 seconds. Which calculation gives average speed in miles per hour?",topic:T.ROC},
+        {n:24,text:"Which function has domain of all real numbers and range ≥ 3?",topic:T.FUN},
+      ]},
+      {id:"II",title:"Short Answer",credits:2,partial:true,questions:[
+        {n:25,text:"Solve algebraically: 5(x − 2) ≤ 3x + 20",topic:T.LEQ},
+        {n:26,text:"State the zeros of f(x) from the graph. Explain your reasoning.",topic:T.QD},
+        {n:27,text:"Relation R = {(−1,1),(0,3),(−2,−4),(x,5)}. State a value for x that makes this a function. Explain.",topic:T.FUN},
+        {n:28,text:"150 students surveyed about video games and social media. Complete the two-way frequency table.",topic:T.STA},
+        {n:29,text:"Use completing the square to find exact values of x for x² + 10x − 30 = 0.",topic:T.QCS},
+        {n:30,text:"Factor 20x³ − 45x completely.",topic:T.QF},
+      ]},
+      {id:"III",title:"Extended Response",credits:4,partial:true,questions:[
+        {n:31,text:"Graph y = x² − 3x − 6 and y = x − 1. State coordinates of all solutions.",topic:T.GR},
+        {n:32,text:"Movie earnings over 6 weeks. Write linear regression equation, state and interpret correlation coefficient.",topic:T.REG},
+        {n:33,text:"Use the quadratic formula to solve 3x² − 10x + 5 = 0. Express in simplest radical form.",topic:T.QCS},
+        {n:34,text:"Graph system of inequalities: 3y + 2x ≤ 15 and y − x > 1. State a point in solution set. Justify.",topic:T.SYS},
+      ]},
+      {id:"IV",title:"Extended Response",credits:6,partial:true,questions:[
+        {n:35,text:"Courtney buys lattes and donuts on two days. Write system of equations, check Courtney's guess, solve algebraically for exact prices.",topic:T.SYS},
+      ]},
+    ]
+  },
+  "June 2025":{
+    maxRaw:82,
+    notes:"All questions on this exam cover taught content. No questions are excluded from scoring.",
+    parts:[
+      {id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[
+        {n:1,text:"The expression 10/√2 is equivalent to?",topic:T.RAT},
+        {n:2,text:"Parabola graphed. Over which interval is it only increasing?",topic:T.QD},
+        {n:3,text:"Which scenario represents an exponential relationship?",topic:T.EXP},
+        {n:4,text:"Andrea and Joe's geometry test scores compared. Which statement about mean and standard deviation is correct?",topic:T.STA},
+        {n:5,text:"Which polynomial has degree 3 and leading coefficient 2?",topic:T.POL},
+        {n:6,text:"(−3x² + 9) − (7x² − 5x + 4) is equivalent to?",topic:T.POL},
+        {n:7,text:"Tomato plant height table. Average rate of change in inches per week between weeks 4 and 12?",topic:T.ROC},
+        {n:8,text:"Chloe solves x² + 5x = 3x + 3 → x² + 2x − 3 = 0. Which property justifies this step?",topic:T.QD},
+        {n:9,text:"Which function represents w(x) = |x| shifted 2 units to the right?",topic:T.TRN},
+        {n:10,text:"System: y + 4x = 5 and 2x − 3y = 10. A step using substitution would be?",topic:T.SYS},
+        {n:11,text:"Which equation is equivalent to x² − 6x = 27 after completing the square?",topic:T.QCS},
+        {n:12,text:"Box plots comparing swim team vs. track team ages. Which statement must be true?",topic:T.STA},
+        {n:13,text:"Piecewise graph shown. The domain of this function is?",topic:T.FUN},
+        {n:14,text:"The sum of 3 and √5 — which statement is correct about rational vs. irrational?",topic:T.RAT},
+        {n:15,text:"Which expression is equivalent to a⁸ − b⁶?",topic:T.QF},
+        {n:16,text:"The sum of 2√27 and 4√12 is?",topic:T.RAT},
+        {n:17,text:"Tim's age + Jack's age = 44. Tim's age is 4 less than 7 times Jack's age x. Which equation models this?",topic:T.LEQ},
+        {n:18,text:"g(x) = (x² − 2)/(x + 3). What is the value of g(−2)?",topic:T.FUN},
+        {n:19,text:"Four graphs shown. Which represent a function?",topic:T.FUN},
+        {n:20,text:"K = ½mv². Write m in terms of K and v.",topic:T.LEQ},
+        {n:21,text:"Solve 2(3x − 1)/3 = x + 2.",topic:T.LEQ},
+        {n:22,text:"Which equation represents the sequence 12, 6, 3, 3/2, … where a₁ = 12?",topic:T.SEQ},
+        {n:23,text:"Which quadratic function has axis of symmetry x = 2?",topic:T.QD},
+        {n:24,text:"Train at 49 mph, cars 56 ft long. Which expression gives cars per minute passing Anna's house?",topic:T.ROC},
+      ]},
+      {id:"II",title:"Short Answer",credits:2,partial:true,questions:[
+        {n:25,text:"Complete the two-way frequency table: 100 students, 44 seniors, 65 prefer videos, 42 of those are juniors.",topic:T.STA},
+        {n:26,text:"Solve the inequality: 5(2 − y) > −11y − 8",topic:T.LEQ},
+        {n:27,text:"Express (5x − 3)(−2x + 7) as a trinomial in standard form.",topic:T.POL},
+        {n:28,text:"Arithmetic sequence: first term −20, fourth term −2. Determine the eighth term.",topic:T.SEQ},
+        {n:29,text:"Write equation in slope-intercept form for the line through (−2, 5) with slope −3.",topic:T.LFN},
+        {n:30,text:"Factor x³ − 36x completely.",topic:T.QF},
+      ]},
+      {id:"III",title:"Extended Response",credits:4,partial:true,questions:[
+        {n:31,text:"Graph f(x) = −3x and g(x) = x² + 2. State values of x where f(x) = g(x).",topic:T.GR},
+        {n:32,text:"Use quadratic formula to solve 6x² + 2x − 1 = 0. Express in simplest radical form.",topic:T.QCS},
+        {n:33,text:"Cell phone price vs. months since release. Write linear regression equation, state and interpret correlation coefficient.",topic:T.REG},
+        {n:34,text:"Solve algebraically: y = x² + 9x + 4 and y − 2x = −6.",topic:T.SYS},
+      ]},
+      {id:"IV",title:"Extended Response",credits:6,partial:true,questions:[
+        {n:35,text:"Sarah earns $6/hr babysitting, $12/hr tutoring, needs ≥$120/week, ≤14 hours total. Write system of inequalities, graph it, state a valid combination.",topic:T.SYS},
+      ]},
+    ]
+  },
+};
+
+const STARTERS = {
+  [T.LEQ]:"e.g. I set up the equation wrong because I confused which quantity was being multiplied…",
+  [T.LFN]:"e.g. I mixed up slope and y-intercept when reading the context…",
+  [T.SYS]:"e.g. I forgot to substitute back to find both variables after solving for one…",
+  [T.QD]: "e.g. I forgot that vertex form tells you the max/min directly…",
+  [T.QF]: "e.g. I forgot to check for a GCF before factoring the trinomial…",
+  [T.QCS]:"e.g. I made an arithmetic error under the radical when applying the formula…",
+  [T.EXP]:"e.g. I confused exponential growth with linear growth when reading the table…",
+  [T.POL]:"e.g. I forgot to distribute the negative sign when subtracting polynomials…",
+  [T.STA]:"e.g. I confused mean and median when the data set had an outlier…",
+  [T.REG]:"e.g. I reported the wrong value — I need to remember r is the correlation, not r²…",
+  [T.SEQ]:"e.g. I used the wrong formula — I mixed up arithmetic and geometric sequence rules…",
+  [T.FUN]:"e.g. I confused domain and range, or forgot a function can't repeat x-values…",
+  [T.TRN]:"e.g. I confused a horizontal shift with a vertical shift when reading the equation…",
+  [T.RAT]:"e.g. I forgot that adding rational + irrational always gives an irrational result…",
+  [T.ROC]:"e.g. I set up the unit conversion chain in the wrong order so units didn't cancel…",
+  [T.GR]: "e.g. I found the intersection correctly but forgot to state both coordinates…",
+  [T.REC]:"(This question is not assessed — no reflection needed)",
+};
+
 const MC_CATS = [
-  { v:'correct',       label:'✓ I got this right',          note:'I understood and solved it correctly' },
-  { v:'guess',         label:'🎲 Lucky guess — got it right', note:'I wasn\'t confident but guessed correctly' },
-  { v:'small-error',   label:'⚡ Small error — I knew the method', note:'Careless mistake; I know how to do this' },
-  { v:'misunderstood', label:'❓ I misread or misunderstood the question', note:'I didn\'t understand what was being asked' },
-  { v:'forgot',        label:'📚 I forgot how to do this',  note:'I need to relearn this topic' },
+  {v:"correct",      label:"✓ I got this right",              note:"I understood and solved it correctly"},
+  {v:"guess",        label:"🎲 Lucky guess — got it right",    note:"I wasn't sure but guessed correctly"},
+  {v:"small-error",  label:"⚡ Small error — I knew the method",note:"Careless mistake; I know how to do this"},
+  {v:"misunderstood",label:"❓ I misread or misunderstood it", note:"I didn't understand what was being asked"},
+  {v:"forgot",       label:"📚 I forgot how to do this",       note:"I need to relearn this topic"},
 ];
-
 const FR_CATS = [
-  { v:'full',          label:'✓ Full credit',                note:'Got all the points' },
-  { v:'partial-close', label:'◑ Partial — almost there',    note:'Small error or missing step' },
-  { v:'partial-gap',   label:'◐ Partial — real gap',        note:'Got some credit but fuzzy on parts of this' },
-  { v:'zero-tried',    label:'○ No credit — I tried',       note:'Attempted but couldn\'t complete it' },
-  { v:'zero-blank',    label:'✗ Left blank',                 note:'Didn\'t attempt this question' },
+  {v:"full",         label:"✓ Full credit",                   note:"Got all the points"},
+  {v:"partial-close",label:"◑ Partial — almost there",        note:"Small error or missing step"},
+  {v:"partial-gap",  label:"◐ Partial — real gap",            note:"Got some credit but fuzzy on parts"},
+  {v:"zero-tried",   label:"○ No credit — I tried",           note:"Attempted but couldn't complete it"},
+  {v:"zero-blank",   label:"✗ Left blank",                    note:"Didn't attempt this question"},
 ];
+const CORRECT = new Set(["correct","full"]);
+const NEEDS_REF = new Set(["guess","small-error","misunderstood","forgot","partial-close","partial-gap","zero-tried","zero-blank"]);
 
-const CORRECT_VALS = new Set(['correct','full']);
-const NEEDS_REFLECTION = new Set(['guess','small-error','misunderstood','forgot','partial-close','partial-gap','zero-tried','zero-blank']);
+// ══ STATE ══
+let currentExam = null, studentName = '', state = {}, teacherNote = '';
 
-// ── STATE ────────────────────────────────────────────────────────────
-let currentExam = null;
-let studentName = '';
-let state = {}; // keyed by question number
+// ══ INIT ══
+window.addEventListener('load', loadRoster);
 
-// ── SETUP SCREEN ─────────────────────────────────────────────────────
-function buildExamGrid() {
-  const grid = document.getElementById('examGrid');
-  Object.keys(EXAMS).forEach(key => {
-    const btn = document.createElement('button');
-    btn.className = 'exam-btn';
-    btn.onclick = () => selectExam(key, btn);
-    btn.innerHTML = `<span class="eb-date">${key}</span><span class="eb-note">Algebra I Regents</span>`;
-    grid.appendChild(btn);
-  });
+async function loadRoster() {
+  const grid = document.getElementById('nameGrid');
+  if (!SCRIPT_URL) {
+    grid.innerHTML = '<p style="color:var(--amber);font-size:.85rem">⚠ Apps Script URL not configured. Contact your teacher.</p>';
+    return;
+  }
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=getRoster`);
+    const data = await res.json();
+    if (!data.students || data.students.length === 0) {
+      grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem">No roster loaded yet. Ask your teacher.</p>';
+      return;
+    }
+    grid.innerHTML = '';
+    data.students.forEach(name => {
+      const btn = document.createElement('button');
+      btn.className = 'sel-btn';
+      btn.onclick = () => selectName(name, btn);
+      btn.innerHTML = `<span class="sb-main">${name}</span>`;
+      grid.appendChild(btn);
+    });
+  } catch(e) {
+    grid.innerHTML = '<p style="color:var(--accent);font-size:.85rem">Could not load roster. Check your connection.</p>';
+  }
+}
+
+function selectName(name, el) {
+  studentName = name;
+  document.querySelectorAll('#nameGrid .sel-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
 }
 
 function selectExam(key, el) {
   currentExam = key;
-  document.querySelectorAll('.exam-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#examGrid .sel-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
 }
 
-function startExam() {
-  const first = document.getElementById('firstName').value.trim();
-  const last  = document.getElementById('lastInitial').value.trim();
-  const err   = document.getElementById('setupErr');
+async function startExam() {
+  const err = document.getElementById('setupErr');
+  if (!studentName) { err.textContent='Please select your name.'; err.style.display='block'; return; }
+  if (!currentExam) { err.textContent='Please select an exam.'; err.style.display='block'; return; }
+  err.style.display='none';
 
-  if (!currentExam) { err.textContent = 'Please select an exam.'; err.style.display='block'; return; }
-  if (!first || !last) { err.textContent = 'Please enter your name.'; err.style.display='block'; return; }
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
 
-  studentName = `${first} ${last}.`;
+  // Fetch teacher note in background
+  try {
+    if (SCRIPT_URL) {
+      const res  = await fetch(SCRIPT_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'getTeacherNote', student:studentName, exam:currentExam})
+      });
+      const data = await res.json();
+      teacherNote = data.note || '';
+    }
+  } catch(e) { teacherNote = ''; }
+
   state = {};
   buildQuestions();
   showScreen('screenQ');
+  btn.disabled = false; btn.textContent = 'Start Reflection →';
 }
 
-// ── BUILD QUESTIONS ──────────────────────────────────────────────────
+// ══ BUILD QUESTIONS ══
 function buildQuestions() {
   const exam = EXAMS[currentExam];
-  const container = document.getElementById('qContainer');
-  container.innerHTML = '';
+  const c    = document.getElementById('qContainer');
+  c.innerHTML = '';
+  document.getElementById('examNotice').innerHTML = `<strong>Note for this exam</strong>${exam.notes}`;
 
-  // Exam notice
-  const notice = document.getElementById('examNotice');
-  notice.innerHTML = `<strong>Note for this exam</strong>${exam.notes}`;
-
-  let totalQ = 0;
+  let total = 0;
   exam.parts.forEach(part => {
-    totalQ += part.questions.length;
-
-    // Part header
+    total += part.questions.length;
     const ph = document.createElement('div');
     ph.className = 'part-hdr';
     ph.innerHTML = `<span class="part-tag">Part ${part.id}</span><span class="part-name">${part.title}</span><span class="part-rule"></span><span class="part-pts">${part.credits} pt${part.credits>1?'s':''} each${part.partial?' · partial credit':' · no partial'}</span>`;
-    container.appendChild(ph);
+    c.appendChild(ph);
 
     const isMC = part.id === 'I';
     const cats = isMC ? MC_CATS : FR_CATS;
 
     part.questions.forEach(q => {
-      state[q.n] = { category: null, score: null, reflection: '', topic: q.topic, flag: q.flag };
+      state[q.n] = {category:null, score:null, reflection:'', topic:q.topic, flag:q.flag||null};
 
       const card = document.createElement('div');
-      card.className = 'qcard' + (q.flag ? ' flagged' : '');
+      card.className = 'qcard';
       card.id = `qcard-${q.n}`;
 
-      // Score chips for FR
       let scoreHtml = '';
       if (!isMC) {
         let chips = '';
-        for (let i = 0; i <= part.credits; i++) {
-          chips += `<span class="chip" data-q="${q.n}" data-s="${i}" onclick="setScore(${q.n},${i},this)">${i}/${part.credits}</span>`;
-        }
+        for (let i=0; i<=part.credits; i++)
+          chips += `<span class="chip" data-q="${q.n}" onclick="setScore(${q.n},${i},this)">${i}/${part.credits}</span>`;
         scoreHtml = `<div class="score-row"><span class="score-lbl">My score:</span><div class="chips">${chips}</div></div>`;
       }
 
-      // Category options
-      const catHtml = cats.map(c =>
-        `<div class="cat" data-v="${c.v}" data-q="${q.n}" onclick="setCat(${q.n},'${c.v}',this)">
+      const catHtml = cats.map(cat =>
+        `<div class="cat" data-v="${cat.v}" onclick="setCat(${q.n},'${cat.v}',this)">
           <span class="cat-dot"></span>
-          <span class="cat-text">${c.label}<em>${c.note}</em></span>
-        </div>`
-      ).join('');
+          <span class="cat-txt">${cat.label}<em>${cat.note}</em></span>
+        </div>`).join('');
 
       const starter = STARTERS[q.topic] || 'e.g. I need to review this topic because…';
-
-      const flagBanner = q.flag
-        ? `<div class="flag-banner">⚑ ${q.flagNote}</div>`
-        : '';
+      const flagBanner = q.flag ? `<div class="flag-banner">⚑ ${q.flagNote}</div>` : '';
 
       card.innerHTML = `
         <div class="q-head" onclick="toggleBody(${q.n})">
@@ -399,269 +634,191 @@ function buildQuestions() {
           <span class="q-text">${q.text}</span>
           <span class="q-stat" id="stat-${q.n}">tap to reflect</span>
         </div>
-        ${flagBanner}
-        ${scoreHtml}
+        ${flagBanner}${scoreHtml}
         <div class="q-body" id="body-${q.n}" style="display:none">
           <div class="cat-lbl">What happened on this question?</div>
           <div class="cats">${catHtml}</div>
-          <div class="ref-wrap" id="ref-wrap-${q.n}">
+          <div class="ref-wrap" id="rw-${q.n}">
             <div class="ref-lbl">In one sentence — what went wrong or what do you need to understand?</div>
-            <textarea id="ref-${q.n}" placeholder="${starter}" oninput="setRef(${q.n},this.value)" rows="2"></textarea>
+            <textarea id="ref-${q.n}" placeholder="${starter}" oninput="state[${q.n}].reflection=this.value" rows="2"></textarea>
           </div>
           <button class="collapse-btn" onclick="toggleBody(${q.n})">↑ Collapse</button>
         </div>`;
-
-      container.appendChild(card);
+      c.appendChild(card);
     });
   });
-
-  updateProgress(totalQ);
+  updateProg(total);
 }
 
-// ── INTERACTIONS ─────────────────────────────────────────────────────
 function toggleBody(n) {
   const b = document.getElementById(`body-${n}`);
-  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+  b.style.display = b.style.display==='none' ? 'block' : 'none';
 }
-
-function setScore(n, s, el) {
-  state[n].score = s;
-  el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+function setScore(n,s,el) {
+  state[n].score=s;
+  el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
-  updateProgress();
+  updateProg();
 }
-
-function setCat(n, v, el) {
-  state[n].category = v;
-  const card = document.getElementById(`qcard-${n}`);
-  card.querySelectorAll('.cat').forEach(c => c.classList.remove('sel'));
+function setCat(n,v,el) {
+  state[n].category=v;
+  document.getElementById(`qcard-${n}`).querySelectorAll('.cat').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
-
-  // Show/hide reflection box
-  const rw = document.getElementById(`ref-wrap-${n}`);
-  if (NEEDS_REFLECTION.has(v)) rw.classList.add('show');
-  else rw.classList.remove('show');
-
-  // Update card state
+  const rw = document.getElementById(`rw-${n}`);
+  NEEDS_REF.has(v) ? rw.classList.add('show') : rw.classList.remove('show');
   const stat = document.getElementById(`stat-${n}`);
-  if (CORRECT_VALS.has(v)) {
-    card.className = 'qcard done';
-    stat.textContent = '✓ got it'; stat.className = 'q-stat ok';
-  } else {
-    card.className = 'qcard done';
-    stat.textContent = '✎ reflected'; stat.className = 'q-stat ok';
-  }
-  updateProgress();
+  stat.textContent = CORRECT.has(v) ? '✓ got it' : '✎ reflected';
+  stat.className = 'q-stat ok';
+  document.getElementById(`qcard-${n}`).classList.add('done');
+  updateProg();
 }
 
-function setRef(n, v) { state[n].reflection = v; }
-
-let _totalQ = 37;
-function updateProgress(total) {
-  if (total) _totalQ = total;
-  const reflected = Object.values(state).filter(s => s.category).length;
-  const pct = (reflected / _totalQ) * 100;
-  document.getElementById('progBar').style.width = pct + '%';
-  document.getElementById('floatProg').textContent = `${reflected} / ${_totalQ} reflected`;
+let _total=37;
+function updateProg(t) {
+  if(t) _total=t;
+  const r = Object.values(state).filter(s=>s.category).length;
+  document.getElementById('progBar').style.width=(r/_total*100)+'%';
+  document.getElementById('floatProg').textContent=`${r} / ${_total} reflected`;
 }
 
-// ── SCORE CALC ────────────────────────────────────────────────────────
+// ══ SCORE CALC ══
 function calcScore() {
-  const exam = EXAMS[currentExam];
+  const exam  = EXAMS[currentExam];
   const chart = CONVERSION_CHARTS[currentExam];
   let raw = 0;
-
   exam.parts.forEach(part => {
-    const isMC = part.id === 'I';
     part.questions.forEach(q => {
-      if (q.flag) return; // excluded
+      if (q.flag) return;
       const s = state[q.n];
       if (!s) return;
-      if (isMC) {
-        if (s.category === 'correct' || s.category === 'guess') raw += 2;
-      } else {
-        if (s.score !== null) raw += s.score;
-      }
+      if (part.id==='I') { if (CORRECT.has(s.category)) raw += 2; }
+      else if (s.score !== null) raw += s.score;
     });
   });
-
-  const scaled = chart.chart[raw] ?? 0;
-  return { raw, scaled };
+  return { raw, scaled: chart.chart[Math.min(raw, CONVERSION_CHARTS[currentExam].maxRaw)] ?? 0 };
 }
 
-// ── SUBMIT ────────────────────────────────────────────────────────────
+// ══ SUBMIT ══
 async function submitReflection() {
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.textContent = 'Submitting…';
+  btn.disabled=true; btn.textContent='Submitting…';
 
   const { raw, scaled } = calcScore();
-
-  // Build row data
   const exam = EXAMS[currentExam];
-  const rows = [];
+  const responses = [];
   exam.parts.forEach(part => {
     part.questions.forEach(q => {
       const s = state[q.n];
-      rows.push({
-        student: studentName,
-        exam: currentExam,
-        part: part.id,
-        question: q.n,
-        topic: q.topic,
-        flag: q.flag || '',
-        score: s.score !== null ? s.score : '',
-        category: s.category || '',
-        reflection: s.reflection || '',
-        rawScore: raw,
-        scaledScore: scaled,
-        timestamp: new Date().toISOString(),
-      });
+      responses.push({part:part.id, question:q.n, topic:q.topic,
+        flag:q.flag||'', score:s.score, category:s.category||'', reflection:s.reflection||''});
     });
   });
 
-  // Send to Google Sheets or download CSV
+  // Save to sheet
   if (SCRIPT_URL) {
     try {
       await fetch(SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ student: studentName, exam: currentExam, responses: rows, rawScore: raw, scaledScore: scaled })
+        method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'submitReflection', student:studentName, exam:currentExam,
+          responses, rawScore:raw, scaledScore:scaled})
       });
-    } catch(e) { downloadCSV(rows); }
-  } else {
-    downloadCSV(rows);
+    } catch(e) {}
   }
 
-  showSuccess(raw, scaled, rows);
+  showSuccess(raw, scaled, responses);
 }
 
-function downloadCSV(rows) {
-  const headers = ['Student','Exam','Part','Question','Topic','Flag','Score','Category','Reflection','Raw Score','Scaled Score','Timestamp'];
-  const csv = [headers.join(','), ...rows.map(r =>
-    [r.student,r.exam,`Part ${r.part}`,r.question,`"${r.topic}"`,r.flag,r.score,r.category,
-     `"${(r.reflection||'').replace(/"/g,'""')}"`,r.rawScore,r.scaledScore,r.timestamp].join(',')
-  )].join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = `${studentName.replace(/\s/g,'_')}_${currentExam.replace(/\s/g,'_')}.csv`;
-  a.click();
-}
-
-// ── SHOW SUCCESS + PLAN ───────────────────────────────────────────────
-function showSuccess(raw, scaled, rows) {
-  document.getElementById('submitBtn').style.display = 'none';
+async function showSuccess(raw, scaled, responses) {
+  document.getElementById('submitBtn').style.display='none';
   const panel = document.getElementById('successPanel');
-  panel.style.display = 'block';
+  panel.style.display='block';
 
-  // Score summary
   const maxRaw = CONVERSION_CHARTS[currentExam].maxRaw;
-  const level = scaled >= 85 ? '5 — Mastery' : scaled >= 80 ? '4 — Proficient' : scaled >= 65 ? '3 — Passing' : '2 — Below Passing';
-  document.getElementById('scoreSummary').innerHTML = `
-    <div class="ss-item"><span class="ss-num">${raw}<span style="font-size:1rem;opacity:.6">/${maxRaw}</span></span><span class="ss-label">Raw Score</span></div>
+  const level  = scaled>=85?'5 — Mastery':scaled>=80?'4 — Proficient':scaled>=65?'3 — Passing':'2 — Below Passing';
+  document.getElementById('scoreSummary').innerHTML=`
+    <div class="ss-item"><span class="ss-num">${raw}<span style="font-size:1rem;opacity:.5">/${maxRaw}</span></span><span class="ss-label">Raw Score</span></div>
     <div class="ss-item"><span class="ss-num">${scaled}</span><span class="ss-label">Scale Score</span></div>
-    <div class="ss-item"><span class="ss-num" style="font-size:1.1rem">${level}</span><span class="ss-label">Performance Level</span></div>`;
+    <div class="ss-item"><span class="ss-num" style="font-size:1rem;line-height:1.3">${level}</span><span class="ss-label">Performance Level</span></div>`;
 
-  // Build study plan & prompt
-  buildStudyPlan(rows, raw, scaled);
-  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Build AI prompt immediately (doesn't need API)
+  buildPrompt(responses, raw, scaled);
+
+  // Now call Claude for real study plan
+  if (SCRIPT_URL) {
+    try {
+      const res  = await fetch(SCRIPT_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'generatePlan', student:studentName, exam:currentExam,
+          responses, rawScore:raw, scaledScore:scaled, teacherNote})
+      });
+      const data = await res.json();
+      if (data.plan) {
+        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
+      } else {
+        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+      }
+    } catch(e) {
+      document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+    }
+  } else {
+    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Apps Script not connected. Use the AI Tutor Prompt below to get your study plan.</p>`;
+  }
 }
 
-function buildStudyPlan(rows, raw, scaled) {
-  const weakTopics = {};
-  const errorTypes = { 'small-error':0, 'misunderstood':0, 'forgot':0, 'zero-tried':0, 'zero-blank':0, 'partial-gap':0, 'partial-close':0 };
+function formatPlan(text) {
+  // Convert markdown-style **headers** to styled paragraphs
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .split('\n\n')
+    .filter(p=>p.trim())
+    .map(p=>`<p>${p.trim()}</p>`)
+    .join('');
+}
 
-  rows.forEach(r => {
-    if (!r.category || r.flag) return;
-    if (!CORRECT_VALS.has(r.category)) {
-      if (!weakTopics[r.topic]) weakTopics[r.topic] = { count:0, cats:[], reflections:[] };
-      weakTopics[r.topic].count++;
-      weakTopics[r.topic].cats.push(r.category);
-      if (r.reflection) weakTopics[r.topic].reflections.push(r.reflection);
-      if (errorTypes[r.category] !== undefined) errorTypes[r.category]++;
-    }
+function buildPrompt(responses, raw, scaled) {
+  const wrongItems = responses.filter(r => !CORRECT.has(r.category) && r.category && !r.flag);
+  const byTopic = {};
+  wrongItems.forEach(r => {
+    if (!byTopic[r.topic]) byTopic[r.topic]=[];
+    byTopic[r.topic].push(r);
   });
+  const topTopics = Object.entries(byTopic).sort((a,b)=>b[1].length-a[1].length).slice(0,3);
 
-  const sorted = Object.entries(weakTopics).sort((a,b) => b[1].count - a[1].count);
-  const top3 = sorted.slice(0,3);
-
-  // Dominant error pattern
-  const maxErr = Object.entries(errorTypes).sort((a,b)=>b[1]-a[1])[0];
-  let patternNote = '';
-  if (maxErr[0] === 'small-error' || maxErr[0] === 'partial-close') patternNote = 'Your biggest issue is <strong>careless errors</strong> — you know the material but are losing points to small mistakes. Slow down and check your work.';
-  else if (maxErr[0] === 'forgot' || maxErr[0] === 'zero-blank') patternNote = 'Your biggest issue is <strong>knowledge gaps</strong> — there are topics you need to relearn, not just review.';
-  else if (maxErr[0] === 'misunderstood' || maxErr[0] === 'zero-tried') patternNote = 'Your biggest issue is <strong>reading and interpreting questions</strong> — re-read each question twice before starting.';
-  else patternNote = 'You have a mix of knowledge gaps and execution errors — work topic by topic below.';
-
-  let planHtml = `<p style="margin-bottom:12px">${patternNote}</p>`;
-
-  if (top3.length === 0) {
-    planHtml += '<p>Great work — you reflected as correct or close on most questions. Focus on maintaining accuracy under pressure.</p>';
-  } else {
-    planHtml += '<p style="margin-bottom:10px"><strong>Your top priority topics:</strong></p>';
-    top3.forEach(([topic, data], i) => {
-      const dominantCat = data.cats.sort((a,b) =>
-        data.cats.filter(x=>x===b).length - data.cats.filter(x=>x===a).length)[0];
-      let advice = '';
-      if (['forgot','zero-blank'].includes(dominantCat)) advice = 'Reteach yourself from scratch — look for examples and work through several problems from the beginning.';
-      else if (['misunderstood','zero-tried'].includes(dominantCat)) advice = 'Practice reading the question carefully. Try restating each problem in your own words before solving.';
-      else advice = 'You have the concept — practice a few more problems and check each step carefully.';
-      planHtml += `<div style="margin:10px 0;padding:12px;background:var(--cream);border-radius:4px;border-left:3px solid var(--ink)">
-        <strong>#${i+1}: ${topic}</strong> (${data.count} question${data.count>1?'s':''})<br>
-        <span style="font-size:.85rem;color:#444">${advice}</span>
-        ${data.reflections.length ? `<div style="font-size:.8rem;color:var(--muted);margin-top:6px;font-style:italic">You wrote: "${data.reflections[0]}"</div>` : ''}
-      </div>`;
-    });
-  }
-
-  document.getElementById('planContent').innerHTML = planHtml;
-
-  // Build AI prompt
-  const promptLines = [
+  const lines = [
     `I'm an Algebra I student preparing for the New York State Regents exam.`,
-    `I just reflected on my ${currentExam} practice Regents exam.`,
-    `My estimated score is ${scaled}/100 (raw: ${raw}).`,
+    `I just reflected on my ${currentExam} practice Regents.`,
+    `My estimated score is ${scaled}/100 (raw score: ${raw}).`,
     ``,
-    `Here are my weakest topics based on my self-assessment:`,
-    ...sorted.slice(0,4).map((([t,d],i) => `${i+1}. ${t} — I got ${d.count} question(s) wrong in this area`)),
+    `My weakest topics based on self-assessment:`,
+    ...topTopics.map(([t,items],i)=>`${i+1}. ${t} — ${items.length} question${items.length>1?'s':''} with errors`),
     ``,
-    `My main error pattern: ${maxErr[0].replace(/-/g,' ')} (I tend to ${maxErr[0].includes('error')||maxErr[0].includes('close') ? 'make careless mistakes' : maxErr[0].includes('blank')||maxErr[0].includes('forgot') ? 'forget how to approach these problems' : 'misunderstand what the question is asking'}).`,
-  ];
-
-  if (sorted.length > 0) {
-    const [t1, d1] = sorted[0];
-    promptLines.push(``, `Here is something I wrote about my biggest weakness (${t1}): "${d1.reflections[0] || 'no additional notes'}"`);
-  }
-
-  promptLines.push(
+    `Things I wrote about what went wrong:`,
+    ...wrongItems.filter(r=>r.reflection).slice(0,4).map(r=>`- Q${r.question}: "${r.reflection}"`),
     ``,
-    `Please help me with the following:`,
+    `Please help me with:`,
     `1. Give me 3 practice problems for each of my top 2 weakest topics.`,
-    `2. For each problem, give me a hint I can use if I get stuck (but don't show the full solution yet).`,
-    `3. After I attempt the problems, I can photograph my work and share it with you — please look at it carefully and tell me specifically what I did right and what I need to fix.`,
-    `4. Based on my error pattern, give me one concrete strategy I can use on the actual exam to avoid losing points.`,
-  );
-
-  document.getElementById('promptText').textContent = promptLines.join('\n');
+    `2. For each problem, give me a hint I can use if I get stuck — but don't show the solution yet.`,
+    `3. After I attempt the problems, I will photograph my work and upload it — please look carefully and tell me exactly what I did right and what to fix.`,
+    `4. Based on my error patterns, give me one concrete strategy I can use on the actual exam to avoid losing points.`,
+  ];
+  document.getElementById('promptText').textContent = lines.join('\n');
 }
 
 function copyPrompt() {
-  const text = document.getElementById('promptText').textContent;
-  navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard.writeText(document.getElementById('promptText').textContent).then(()=>{
     const btn = document.querySelector('.copy-btn');
-    btn.textContent = 'Copied ✓';
-    setTimeout(() => btn.textContent = 'Copy', 2000);
+    btn.textContent='Copied ✓';
+    setTimeout(()=>btn.textContent='Copy',2000);
   });
 }
 
-// ── NAV ──────────────────────────────────────────────────────────────
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
-// ── INIT ─────────────────────────────────────────────────────────────
-buildExamGrid();
 </script>
 </body>
 </html>
