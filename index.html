@@ -750,29 +750,29 @@ async function showSuccess(raw, scaled, responses) {
 
   // Now call Claude for real study plan
   if (SCRIPT_URL) {
-  try {
-    const params = new URLSearchParams({
-      action: 'generatePlan',
-      payload: JSON.stringify({student:studentName, exam:currentExam,
-        responses, rawScore:raw, scaledScore:scaled, teacherNote})
-    });
-    const res = await fetch(`${SCRIPT_URL}?${params}`, {
-      redirect: 'follow',
-      method: 'GET'
-    });
-    const data = await res.json();
-    if (data.plan) {
-      document.getElementById('planContent').innerHTML = formatPlan(data.plan);
-    } else {
+    try {
+      const params = new URLSearchParams({
+        action: 'generatePlan',
+        payload: JSON.stringify({student:studentName, exam:currentExam,
+          responses, rawScore:raw, scaledScore:scaled, teacherNote})
+      });
+      const res = await fetch(`${SCRIPT_URL}?${params}`, {
+        redirect: 'follow',
+        method: 'GET'
+      });
+      const data = await res.json();
+      if (data.plan) {
+        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
+      } else {
+        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+      }
+    } catch(e) {
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
-  } catch(e) {
-    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
-  }
-}
+  }  // ← this closing brace was missing
+}    // ← closes showSuccess
 
 function formatPlan(text) {
-  // Convert markdown-style **headers** to styled paragraphs
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .split('\n\n')
@@ -823,6 +823,3 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-</script>
-</body>
-</html>
