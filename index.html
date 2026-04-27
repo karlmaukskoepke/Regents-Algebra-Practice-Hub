@@ -546,7 +546,7 @@ async function loadRoster() {
       grid.appendChild(btn);
     });
   } catch(e) {
-    grid.innerHTML = '<p style="color:var(--accent);font-size:.85rem">Could not load roster. Check your connection.</p>';
+    grid.innerHTML = `<p style="color:var(--accent);font-size:.85rem">Error: ${e.message}</p>`;
   }
 }
 
