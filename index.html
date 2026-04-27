@@ -519,42 +519,25 @@ const NEEDS_REF = new Set(["guess","small-error","misunderstood","forgot","parti
 let currentExam = null, studentName = '', state = {}, teacherNote = '';
 
 // ══ INIT ══
-window.addEventListener('load', loadRoster);
-
-async function loadRoster() {
+window.addEventListener('load', () => {
   const grid = document.getElementById('nameGrid');
-  if (!SCRIPT_URL) {
-    grid.innerHTML = '<p style="color:var(--amber);font-size:.85rem">⚠ Apps Script URL not configured. Contact your teacher.</p>';
-    return;
-  }
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    
-    const res = await fetch(`${SCRIPT_URL}?action=getRoster`, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    const data = await res.json();
-    if (!data.students || data.students.length === 0) {
-      grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem">No roster loaded yet. Ask your teacher.</p>';
-      return;
-    }
-    grid.innerHTML = '';
-    data.students.forEach(name => {
-      const btn = document.createElement('button');
-      btn.className = 'sel-btn';
-      btn.onclick = () => selectName(name, btn);
-      btn.innerHTML = `<span class="sb-main">${name}</span>`;
-      grid.appendChild(btn);
-    });
-  } catch(e) {
-    grid.innerHTML = `<p style="color:var(--accent);font-size:.85rem">Error: ${e.message}</p>`;
-  }
-}
-
+  const students = [
+    "Anna C","Dylan C","Preston D","Ariel F","Justin F",
+    "Sophia GA","Matthew G","Aleksander H","Kylie I","Rosie K",
+    "Alyssa L","Cyrus L","Makayla M","Matthew M","Nathaniel M",
+    "Zuri M","William O","Jax R","Annabelle RJ","Mason R",
+    "Michael S","Emma S","Ben W","TEST A"
+  ];
+  grid.innerHTML = '';
+  students.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'sel-btn';
+    btn.onclick = () => selectName(name, btn);
+    btn.innerHTML = `<span class="sb-main">${name}</span>`;
+    grid.appendChild(btn);
+  });
+});
+  
 function selectName(name, el) {
   studentName = name;
   document.querySelectorAll('#nameGrid .sel-btn').forEach(b => b.classList.remove('selected'));
