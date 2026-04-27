@@ -528,10 +528,15 @@ async function loadRoster() {
     return;
   }
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    
     const res = await fetch(`${SCRIPT_URL}?action=getRoster`, {
+      method: 'GET',
       redirect: 'follow',
-      method: 'GET'
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     const data = await res.json();
     if (!data.students || data.students.length === 0) {
       grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem">No roster loaded yet. Ask your teacher.</p>';
