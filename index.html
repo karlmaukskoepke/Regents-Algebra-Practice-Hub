@@ -252,7 +252,7 @@ textarea::placeholder{color:#aaa;font-style:italic}
 // CONFIG — paste your Apps Script URL here after setup
 // ══════════════════════════════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhayMGlUl0snm-cnld5FGs40QiyMgZndXS43kDwLG5dhNUPLSW9XOVRBowK_0RCf5-/exec';
-
+const ANTHROPIC_API_KEY = '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';
 // ══════════════════════════════════════════════════════════════════
 // CONVERSION CHARTS
 // ══════════════════════════════════════════════════════════════════
@@ -755,34 +755,76 @@ async function showSuccess(raw, scaled, responses) {
     }).catch(() => {});
   }
 
-  // Generate plan via GET
-  if (SCRIPT_URL) {
-    try {
-      const params = new URLSearchParams({
-        action: 'generatePlan',
-        student: studentName,
-        exam: currentExam,
-        rawScore: raw,
-        scaledScore: scaled,
-        teacherNote
-      });
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 25000);
-      const res = await fetch(`${SCRIPT_URL}?${params}`, {
-        method: 'GET',
-        redirect: 'follow',
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
-      const data = await res.json();
-      if (data.plan) {
-        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
-      } else {
-        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
-      }
-    } catch(e) {
+  // Generate plan directly via Anthropic API
+  try {
+    const wrongItems = responses.filter(r => !['correct','full',''].includes(r.category) && !r.flag);
+    const topicBreakdown = {};
+    wrongItems.forEach(r => {
+      if (!topicBreakdown[r.topic]) topicBreakdown[r.topic] = [];
+      topicBreakdown[r.topic].push(r);
+    });
+    const topicSummary = Object.entries(topicBreakdown)
+      .sort((a,b) => b[1].length - a[1].length)
+      .map(([topic, items]) => {
+        const cats = items.map(i => i.category).join(', ');
+        const refs = items.filter(i => i.reflection).map(i => `"${i.reflection}"`).join('; ');
+        return `- ${topic} (${items.length} question${items.length>1?'s':''}): error types: ${cats}${refs ? `. Student wrote: ${refs}` : ''}`;
+      }).join('\n');
+
+    const prompt = `You are a skilled math teacher helping an Algebra I student prepare for the New York State Regents exam.
+
+STUDENT: ${studentName}
+EXAM: ${currentExam} Algebra I Regents (Practice)
+RAW SCORE: ${raw} → SCALE SCORE: ${scaled}/100
+
+TEACHER'S NOTES ON THIS STUDENT:
+${teacherNote || 'No teacher notes provided yet.'}
+
+STUDENT'S WEAK AREAS BY TOPIC:
+${topicSummary || 'Student marked all questions as correct — teacher should verify.'}
+
+Write a personalized study plan. Structure your response EXACTLY as follows:
+
+**Where you are right now**
+2-3 sentences about the score and what it means.
+
+**Your biggest priority**
+The single most important topic to work on first and why.
+
+**Your top 3 focus areas**
+For each: name the topic, describe the specific gap, give one concrete action.
+
+**One thing you're doing well**
+Something genuine based on what they got right or teacher notes.
+
+**Your next step right now**
+One specific actionable thing to do TODAY.
+
+Keep under 350 words. Write directly to the student using "you". Prose only, no bullet points inside sections.`;
+
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const apiData = await apiRes.json();
+    const plan = apiData.content?.[0]?.text || '';
+    if (plan) {
+      document.getElementById('planContent').innerHTML = formatPlan(plan);
+    } else {
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
+  } catch(e) {
+    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
   }
 }    // closes showSuccess
   
