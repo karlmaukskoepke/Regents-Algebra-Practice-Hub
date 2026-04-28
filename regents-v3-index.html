@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algebra I Regents — Exam Reflection</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1c1c2e; --paper:#faf9f5; --cream:#f0ece0; --rule:#ddd8c8;
+  --accent:#b83232; --green:#1a6b3c; --green-s:#e6f4ed;
+  --amber:#b86a0a; --amber-s:#fef3e2; --blue:#1a3d6b; --blue-s:#e6eef8;
+  --purple:#5b2d8e; --purple-s:#f0eaf8; --red-s:#fceaea; --muted:#7a7a8c; --r:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;
+  background-image:repeating-linear-gradient(transparent,transparent 27px,var(--rule) 27px,var(--rule) 28px);
+  background-attachment:fixed}
+
+.hdr{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+.hdr-inner{max-width:800px;margin:0 auto;padding:16px 24px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.hdr-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700}
+.hdr-sub{font-family:'DM Mono',monospace;font-size:.72rem;color:#9090b0;letter-spacing:.06em}
+.prog-wrap{height:3px;background:#2c2c4a}
+.prog-bar{height:3px;background:var(--accent);transition:width .4s ease;width:0%}
+
+.screen{display:none;max-width:800px;margin:0 auto;padding:40px 24px 100px}
+.screen.active{display:block}
+
+.card{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:32px;
+  margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{font-family:'Playfair Display',serif;font-size:1.45rem;margin-bottom:12px}
+.card p{font-size:.93rem;line-height:1.75;color:#333;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+
+.select-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.sel-btn{padding:14px 16px;border:2px solid var(--rule);border-radius:var(--r);
+  background:var(--paper);cursor:pointer;text-align:left;transition:all .18s;
+  font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--ink)}
+.sel-btn:hover{border-color:var(--ink);background:var(--cream)}
+.sel-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.sel-btn .sb-main{font-weight:500;display:block}
+.sel-btn .sb-sub{font-size:.75rem;opacity:.65;display:block;margin-top:3px;font-style:italic}
+
+.name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:12px}
+
+.btn-primary{background:var(--ink);color:var(--paper);border:none;padding:13px 32px;
+  font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:500;border-radius:var(--r);
+  cursor:pointer;letter-spacing:.02em;transition:all .2s;margin-top:20px;display:inline-block}
+.btn-primary:hover{background:var(--accent);transform:translateY(-1px)}
+.btn-primary:disabled{background:var(--muted);cursor:not-allowed;transform:none}
+
+.err{color:var(--accent);font-size:.84rem;margin-top:8px;display:none}
+.loading-msg{color:var(--muted);font-style:italic;font-size:.88rem;margin-top:8px}
+
+.exam-notice{background:var(--amber-s);border:1px solid var(--amber);border-radius:var(--r);
+  padding:14px 18px;margin-bottom:28px;font-size:.86rem;line-height:1.65;color:#5a3a00}
+.exam-notice strong{display:block;margin-bottom:4px;font-size:.78rem;
+  font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+
+.part-hdr{display:flex;align-items:center;gap:14px;margin:44px 0 18px}
+.part-tag{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#fff;background:var(--ink);padding:4px 10px;border-radius:2px}
+.part-name{font-family:'Playfair Display',serif;font-size:1.05rem}
+.part-rule{flex:1;height:1px;background:var(--rule)}
+.part-pts{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)}
+
+/* QUESTION CARDS */
+.qcard{background:#fff;border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
+.qcard:hover{box-shadow:0 3px 16px rgba(0,0,0,.09)}
+.qcard.done{border-left:3px solid var(--green)}
+.qcard.done-wrong{border-left:3px solid var(--accent)}
+
+.q-head{display:flex;align-items:flex-start;gap:14px;padding:18px 20px 14px;cursor:pointer;user-select:none}
+.q-num{font-family:'DM Mono',monospace;font-size:.7rem;background:var(--cream);
+  border:1px solid var(--rule);padding:3px 8px;border-radius:2px;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.q-text{flex:1;font-size:.9rem;line-height:1.55}
+.q-stat{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);white-space:nowrap;margin-top:3px;flex-shrink:0}
+.q-stat.ok{color:var(--green)}
+.q-stat.wrong{color:var(--accent)}
+
+.flag-banner{padding:8px 20px;background:var(--amber-s);font-size:.8rem;
+  color:#5a3a00;border-bottom:1px solid #f0d090;font-style:italic}
+
+/* MC BODY */
+.q-body{padding:14px 20px 18px;border-top:1px solid var(--cream)}
+
+/* RIGHT/WRONG TOGGLE */
+.rw-row{display:flex;gap:8px;margin-bottom:0}
+.rw-btn{flex:1;padding:10px;border:2px solid var(--rule);border-radius:var(--r);
+  background:var(--paper);cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:.88rem;font-weight:500;transition:all .15s;text-align:center}
+.rw-btn:hover{border-color:var(--ink)}
+.rw-btn.got-right.sel{background:var(--green-s);border-color:var(--green);color:var(--green)}
+.rw-btn.got-wrong.sel{background:var(--red-s);border-color:var(--accent);color:var(--accent)}
+
+/* WRONG ANSWER CHOICES */
+.wrong-section{display:none;margin-top:14px}
+.wrong-section.show{display:block}
+.wrong-lbl{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.answer-choices{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.ac-option{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;
+  border:1px solid var(--rule);border-radius:var(--r);cursor:pointer;
+  transition:all .15s;background:var(--paper)}
+.ac-option:hover{background:var(--cream);border-color:#b0aa98}
+.ac-num{font-family:'DM Mono',monospace;font-size:.75rem;font-weight:500;
+  background:var(--cream);border:1px solid var(--rule);padding:2px 7px;
+  border-radius:2px;flex-shrink:0;margin-top:1px}
+.ac-text{font-size:.86rem;line-height:1.4;flex:1}
+.ac-option.sel{background:var(--red-s);border-color:var(--accent)}
+.ac-option.sel .ac-num{background:var(--accent);color:white;border-color:var(--accent)}
+
+/* FR SCORE CHIPS */
+.score-row{padding:14px 20px;border-top:1px solid var(--cream);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score-lbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:4px 11px;border:1px solid var(--rule);border-radius:20px;
+  font-family:'DM Mono',monospace;font-size:.78rem;cursor:pointer;background:var(--paper);
+  color:var(--muted);transition:all .15s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* REFLECTION */
+.ref-section{display:none;margin-top:12px}
+.ref-section.show{display:block}
+.ref-lbl{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+textarea{width:100%;padding:9px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.6;color:var(--ink);
+  background:var(--paper);resize:vertical;min-height:66px;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--ink);background:#fff}
+textarea::placeholder{color:#aaa;font-style:italic}
+
+.collapse-btn{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);
+  border:none;background:none;cursor:pointer;margin-top:10px;text-decoration:underline}
+.collapse-btn:hover{color:var(--ink)}
+
+/* SUBMIT */
+.submit-wrap{margin-top:50px;padding-top:28px;border-top:2px solid var(--ink)}
+.submit-wrap h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:6px}
+.submit-wrap p{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:20px}
+
+/* SUCCESS */
+.success{background:var(--green-s);border:1px solid var(--green);border-radius:var(--r);
+  padding:28px;margin-top:24px;display:none}
+.success h3{font-family:'Playfair Display',serif;color:var(--green);font-size:1.3rem;margin-bottom:8px}
+
+.score-summary{background:var(--ink);color:var(--paper);border-radius:var(--r);
+  padding:20px 24px;margin:16px 0;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
+.ss-item{text-align:center}
+.ss-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;display:block}
+.ss-label{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.07em;
+  text-transform:uppercase;opacity:.7;display:block;margin-top:2px}
+
+.plan-box{background:#fff;border:1px solid var(--rule);border-radius:var(--r);padding:24px;margin-top:16px}
+.plan-box h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:14px}
+.plan-content{font-size:.92rem;line-height:1.8}
+.plan-content p{margin-bottom:10px}
+.plan-content strong{color:var(--ink)}
+.plan-loading{color:var(--muted);font-style:italic;font-size:.9rem;padding:20px 0;text-align:center}
+.plan-loading::after{content:'';animation:dots 1.4s infinite;display:inline-block}
+@keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
+
+.prompt-box{background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
+  padding:16px;margin-top:12px;font-family:'DM Mono',monospace;font-size:.76rem;
+  line-height:1.75;white-space:pre-wrap;word-break:break-word;position:relative;
+  max-height:320px;overflow-y:auto}
+.copy-btn{position:sticky;top:0;float:right;background:var(--ink);color:#fff;
+  border:none;padding:5px 12px;border-radius:2px;font-family:'DM Mono',monospace;
+  font-size:.7rem;cursor:pointer;transition:background .15s;margin-bottom:8px}
+.copy-btn:hover{background:var(--accent)}
+
+.float{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--paper);
+  padding:9px 16px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:none;opacity:.92;z-index:100}
+
+@media(max-width:600px){
+  .select-grid{grid-template-columns:1fr}
+  .screen{padding:24px 14px 80px}
+  .q-head{padding:14px 14px 10px}
+  .q-body,.score-row{padding-left:14px;padding-right:14px}
+  .score-summary{gap:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <span class="hdr-title">Algebra I Regents</span>
+    <span class="hdr-sub">EXAM REFLECTION &amp; SELF-ASSESSMENT</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+</header>
+
+<!-- SCREEN 1: SETUP -->
+<div class="screen active" id="screenSetup">
+  <div class="card" style="border-top:4px solid var(--accent)">
+    <h2>Welcome.</h2>
+    <p>Your teacher has already scored your written responses. For each question, you'll reflect on what happened. Keep your paper exam in front of you.</p>
+    <p>When you submit, you'll receive your estimated score and a personalized study plan generated just for you.</p>
+  </div>
+  <div class="card">
+    <h2>Select your name</h2>
+    <p style="color:var(--muted);font-size:.85rem">Don't see your name? Ask your teacher.</p>
+    <div class="name-grid" id="nameGrid">
+      <p class="loading-msg">Loading class roster…</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Which exam are you reflecting on?</h2>
+    <div class="select-grid" id="examGrid">
+      <button class="sel-btn" onclick="selectExam('June 2022',this)"><span class="sb-main">June 2022</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2023',this)"><span class="sb-main">June 2023</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2024',this)"><span class="sb-main">June 2024</span><span class="sb-sub">Algebra I Regents</span></button>
+      <button class="sel-btn" onclick="selectExam('June 2025',this)"><span class="sb-main">June 2025</span><span class="sb-sub">Algebra I Regents</span></button>
+    </div>
+  </div>
+  <button class="btn-primary" id="startBtn" onclick="startExam()">Start Reflection →</button>
+  <p class="err" id="setupErr"></p>
+</div>
+
+<!-- SCREEN 2: QUESTIONS -->
+<div class="screen" id="screenQ">
+  <div class="exam-notice" id="examNotice"></div>
+  <div id="qContainer"></div>
+  <div class="submit-wrap">
+    <h3>Ready to submit?</h3>
+    <p>Once you submit, your reflection is saved and your personalized study plan will generate in about 15 seconds.</p>
+    <button class="btn-primary" id="submitBtn" onclick="submitReflection()">Submit My Reflection</button>
+    <p class="err" id="submitErr"></p>
+  </div>
+  <div class="success" id="successPanel">
+    <h3>Reflection submitted ✓</h3>
+    <p>Here's your estimated score and study plan.</p>
+    <div class="score-summary" id="scoreSummary"></div>
+    <div class="plan-box">
+      <h4>Your Personalized Study Plan</h4>
+      <div class="plan-content" id="planContent"><div class="plan-loading">Generating your study plan</div></div>
+    </div>
+    <div class="plan-box" style="margin-top:16px">
+      <h4>AI Tutor Prompt</h4>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:10px">
+        Copy this and paste it into Claude, ChatGPT, or any AI assistant to get a personalized tutoring session. After you attempt the practice problems, take a photo of your work and upload it for specific feedback on exactly what you did right and what to fix.
+      </p>
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+        <span id="promptText"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="float" id="floatProg">0 / 0 reflected</div>
+
+<script>
+console.log('Script started');
+
+// ══════════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhayMGlUl0snm-cnld5FGs40QiyMgZndXS43kDwLG5dhNUPLSW9XOVRBowK_0RCf5-/exec';
+const ANTHROPIC_API_KEY = ['sk-ant-', 'api03-egS5ikdJr7T1MaPmFaeD71DlJampCLv8julmQvWxJ9trKeAct20JS1HD0bnTamEozRp-hGMpJ4ZKn_puPPHxEA-L-7olAAA'].join('');
+
+// ══════════════════════════════════════════════════════════════════
+// ANSWER CHOICES
+// ══════════════════════════════════════════════════════════════════
+const ANSWER_CHOICES = {
+  "June 2022": {
+    1:[{val:'1',text:'The more minutes an athlete is on the field, the more goals he scores'},{val:'2',text:'The more gasoline you purchase at the pump, the more you pay'},{val:'3',text:'The longer a shopper stays at the mall, the more purchases she makes'},{val:'4',text:'As the price of a gift increases, the size of the gift box increases'}],
+    2:[{val:'1',text:'f(0) = 0'},{val:'2',text:'f(3) = 4'},{val:'3',text:'f(4) = 3'},{val:'4',text:'f(5) = 0'}],
+    3:[{val:'1',text:'c(s) = 5.75s + 0.75'},{val:'2',text:'c(s) = 0.75s + 5.75'},{val:'3',text:'c(s) = 5.00s + 0.75'},{val:'4',text:'c(s) = 0.75s + 5.00'}],
+    4:[{val:'1',text:'(x − 3)(x − 2)'},{val:'2',text:'(x − 2)(x + 3)'},{val:'3',text:'(x − 6)(x + 1)'},{val:'4',text:'(x + 6)(x − 1)'}],
+    5:[{val:'1',text:'0.50x + 2y ≤ 100'},{val:'2',text:'0.50x + 2y ≥ 100'},{val:'3',text:'2x + 0.50y ≤ 100'},{val:'4',text:'2x + 0.50y ≥ 100'}],
+    6:[{val:'1',text:'Integers'},{val:'2',text:'Whole numbers'},{val:'3',text:'Rational numbers'},{val:'4',text:'Irrational numbers'}],
+    7:[{val:'1',text:'b = 8'},{val:'2',text:'b = −8'},{val:'3',text:'b = 18'},{val:'4',text:'b = −18'}],
+    8:[{val:'1',text:'f(x): 6,9,12,15,18 — adds 3 each time (linear)'},{val:'2',text:'h(x): 2,7,12,17,22 — adds 5 each time (linear)'},{val:'3',text:'k(x): 4,16,64,256,1024 — multiplies by 4 each time (exponential)'},{val:'4',text:'p(x): −9.5,−12,−14.5,−17,−19.5 — subtracts 2.5 each time (linear)'}],
+    9:[{val:'1',text:'(5x)⁶'},{val:'2',text:'(5³ˣ)²'},{val:'3',text:'(5⁵)ˣ'},{val:'4',text:'(5²)³ˣ'}],
+    10:[{val:'1',text:'A graph that fails the vertical line test'},{val:'2',text:'Mapping where input 1 goes to both 1 and 2 (not a function)'},{val:'3',text:'Set {(0,1),(2,3),(3,2),(3,4)} — input 3 has two outputs'},{val:'4',text:'Piecewise: y=x for −1<x≤2, y=x² for 2<x≤4'}],
+    11:[{val:'1',text:'y = (C − Ax) / B'},{val:'2',text:'y = (C − A) / Bx'},{val:'3',text:'y = (C − A) / (x + B)'},{val:'4',text:'y = (C − B) / Ax'}],
+    12:[{val:'1',text:'{−4/3, 2}'},{val:'2',text:'{−4, 4}'},{val:'3',text:'{−2, 4/3}'},{val:'4',text:'{4, −2}'}],
+    13:[{val:'1',text:'0.10d + 0.05(2d + 5) = 1.45'},{val:'2',text:'0.10(2d + 5) + 0.05d = 1.45'},{val:'3',text:'d + (2d + 5) = 1.45'},{val:'4',text:'(d + 5) + 2d = 1.45'}],
+    14:[{val:'1',text:'Andrew has a higher mean than Donna'},{val:'2',text:'Donna and Andrew have the same median'},{val:'3',text:'Andrew has a larger interquartile range than Donna'},{val:'4',text:'The 3rd quartile for Donna is greater than for Andrew'}],
+    15:[{val:'1',text:'2.4'},{val:'2',text:'12'},{val:'3',text:'3'},{val:'4',text:'4'}],
+    16:[{val:'1',text:'The graphs do not intersect'},{val:'2',text:'The graphs intersect in one point'},{val:'3',text:'The graphs intersect in two points'},{val:'4',text:'The graphs intersect in three points'}],
+    17:[{val:'1',text:'m² + 9'},{val:'2',text:'m² − 9'},{val:'3',text:'m² + 6m + 9'},{val:'4',text:'m² − 6m + 9'}],
+    18:[{val:'1',text:'Andrea and Bill only'},{val:'2',text:'Bill and Christine only'},{val:'3',text:'Andrea and Christine only'},{val:'4',text:'Andrea, Bill, and Christine'}],
+    19:[{val:'1',text:'The maximum of f(x) is less than the maximum of j(x)'},{val:'2',text:'The maximum of g(x) is less than the maximum of h(x)'},{val:'3',text:'The maximum of f(x) equals the maximum of g(x)'},{val:'4',text:'The maximum of h(x) equals the maximum of j(x)'}],
+    20:[{val:'1',text:'6x⁷ + x⁵ − 2x + 4'},{val:'2',text:'4 − x + 7x⁶ − 3x²'},{val:'3',text:'7x⁴ + 6 − x²'},{val:'4',text:'5x − 4x⁶ + 7'}],
+    21:[{val:'1',text:'A = P(1.025)ᵗ — principal increasing at 25% interest rate'},{val:'2',text:'A = P(1.0052)ᵗ — principal increasing at 52% interest rate'},{val:'3',text:'A = P(0.86)ᵗ — principal decreasing at 14% interest rate'},{val:'4',text:'A = P(0.68)ᵗ — principal decreasing at 68% interest rate'}],
+    22:[{val:'1',text:'(4.5 hr/50 km) · (1.609 km/1 mi) · (60 min/1 hr)'},{val:'2',text:'(50 km/4.5 hr) · (1 mi/1.609 km) · (60 min/1 hr)'},{val:'3',text:'(50 km/4.5 hr) · (1 mi/1.609 km) · (1 hr/60 min)'},{val:'4',text:'(4.5 hr/50 km) · (1 mi/1.609 km) · (60 min/1 hr)'}],
+    23:[{val:'1',text:'x = 3a/2 − 1'},{val:'2',text:'x = a − 1'},{val:'3',text:'x = (4−1)/a · 2'},{val:'4',text:'x = 2a − 1'}],
+    24:[{val:'1',text:'a₄ = 107'},{val:'2',text:'a₄ = 95'},{val:'3',text:'a₄ = 55'},{val:'4',text:'a₄ = 67'}],
+  },
+  "June 2023": {
+    1:[{val:'1',text:'(3m − 10)(3m + 10)'},{val:'2',text:'(3m − 10)(3m − 10)'},{val:'3',text:'(3m − 50)(3m + 50)'},{val:'4',text:'(3m − 50)(3m − 50)'}],
+    2:[{val:'1',text:'√16 + √1'},{val:'2',text:'√25 + √4'},{val:'3',text:'√36 + √7'},{val:'4',text:'√49 + √9'}],
+    3:[{val:'1',text:'y = 2x − 2'},{val:'2',text:'y = 2x − 8'},{val:'3',text:'y = 2x + 13'},{val:'4',text:'y = 2x − 14'}],
+    4:[{val:'1',text:'2x² − 2x + 2'},{val:'2',text:'2x² + 2x + 10'},{val:'3',text:'2x⁴ − 2x² + 2'},{val:'4',text:'2x⁴ − 2x² + 10'}],
+    5:[{val:'1',text:'−149'},{val:'2',text:'−143'},{val:'3',text:'133'},{val:'4',text:'139'}],
+    6:[{val:'1',text:'(x − 9)² = 4'},{val:'2',text:'(x − 3)² = 2'},{val:'3',text:'x = ±13'},{val:'4',text:'x − 9 = ±9'}],
+    7:[{val:'1',text:'g(x) = 2(5)ˣ (exponential)'},{val:'2',text:'f(x) = 2x + 5 (linear)'},{val:'3',text:'h(x) = 2x² + 5 (quadratic)'},{val:'4',text:'k(x) = 2x³ + 5 (cubic)'}],
+    8:[{val:'1',text:'The total number of bacteria currently present'},{val:'2',text:'The percent at which the bacteria are growing'},{val:'3',text:'The initial amount of bacteria'},{val:'4',text:'The number of time periods'}],
+    9:[{val:'1',text:'(30,000/wk)·(7 days/wk)·(60 min/hr)·(1 day/24 hr) — wrong setup'},{val:'2',text:'(30,000/wk)·(1 wk/7 days)·(1 day/24 hr)·(1 hr/60 min) — correct'},{val:'3',text:'(1 wk/30,000)·(1 wk/7 days)·(1 day/24 hr)·(1 hr/60 min) — inverted'},{val:'4',text:'(1 wk/30,000)·(7 days/wk)·(24 hr/day)·(60 min/hr) — inverted & wrong'}],
+    10:[{val:'1',text:'f(x) = (x + 2)(x − 3)'},{val:'2',text:'f(x) = (x − 2)(x + 3)'},{val:'3',text:'f(x) = (x − 2)²(x + 3)'},{val:'4',text:'f(x) = (x − 2)(x + 3)(x − 12)'}],
+    11:[{val:'1',text:'−15'},{val:'2',text:'−7'},{val:'3',text:'17'},{val:'4',text:'25'}],
+    12:[{val:'1',text:'V(x) = (6+x)(4+x)(8+x) — height also increases'},{val:'2',text:'V(x) = (6+x)(4+x)(8) — correct, height stays 8'},{val:'3',text:'V(x) = (6+x)+(4+x)+(8+x) — addition not multiplication'},{val:'4',text:'V(x) = (6+x)+(4+x)+8 — addition not multiplication'}],
+    13:[{val:'1',text:'300(4)ˣ · (4)³'},{val:'2',text:'300(4ˣ)³'},{val:'3',text:'300(4)ˣ + 300(4)³'},{val:'4',text:'300x · (4)³'}],
+    14:[{val:'1',text:'1.75 + d ≥ 3.00 — missing the 0.10 multiplier'},{val:'2',text:'1.75 + 0.10d ≥ 3.00 — correct'},{val:'3',text:'1.75 + d ≤ 3.00 — wrong inequality direction'},{val:'4',text:'1.75 + 0.10d ≤ 3.00 — wrong inequality direction'}],
+    15:[{val:'1',text:'h = 2A − b₁ − b₂'},{val:'2',text:'h = (2A − b₁) / b₂'},{val:'3',text:'h = ½A − b₁ − b₂'},{val:'4',text:'h = 2A / (b₁ + b₂)'}],
+    16:[{val:'1',text:'g(x) is a reflection of f(x) over the y-axis'},{val:'2',text:'g(x) is a reflection of f(x) over the x-axis'},{val:'3',text:'g(x) is wider than f(x)'},{val:'4',text:'g(x) is narrower than f(x)'}],
+    17:[{val:'1',text:'About 15.8%'},{val:'2',text:'About 45.2%'},{val:'3',text:'About 64.4%'},{val:'4',text:'About 82.6%'}],
+    18:[{val:'1',text:'{9, 4}'},{val:'2',text:'{−4, 9}'},{val:'3',text:'{6}'},{val:'4',text:'{±6}'}],
+    19:[{val:'1',text:'I and II only — both have vertex (−2, 5)'},{val:'2',text:'II and III only'},{val:'3',text:'I and III only'},{val:'4',text:'I, II, and III'}],
+    20:[{val:'1',text:'(−∞, −4]'},{val:'2',text:'(−∞, ∞) — all real numbers'},{val:'3',text:'[−4, 3]'},{val:'4',text:'[3, ∞)'}],
+    21:[{val:'1',text:'aₙ = 2n − 8'},{val:'2',text:'aₙ = 2(n + 1) − 8'},{val:'3',text:'a₁ = 10; aₙ₊₁ = 2aₙ − 8'},{val:'4',text:'a₁ = 10; aₙ₊₁ = 2(aₙ − 8)'}],
+    22:[{val:'1',text:'x ≤ 11'},{val:'2',text:'x ≥ 11'},{val:'3',text:'x ≤ −15'},{val:'4',text:'x ≥ −15'}],
+    23:[{val:'1',text:'Third-degree polynomial with constant term −2'},{val:'2',text:'Third-degree polynomial with leading coefficient 3'},{val:'3',text:'Second-degree polynomial with constant term 2'},{val:'4',text:'Second-degree polynomial with leading coefficient 3'}],
+    24:[{val:'1',text:'Nonnegative integers'},{val:'2',text:'Rational numbers'},{val:'3',text:'Real numbers'},{val:'4',text:'Integers'}],
+  },
+  "June 2024": {
+    1:[{val:'1',text:'The ball lands on the ground at 4 seconds'},{val:'2',text:'The ball reaches a maximum height of 11 feet'},{val:'3',text:'The ball was launched from a height of 0 feet'},{val:'4',text:'The ball reaches its maximum height at 2 seconds'}],
+    2:[{val:'1',text:'a + c < 48 and 18a + 12c > 650'},{val:'2',text:'a + c ≤ 48 and 18a + 12c ≥ 650'},{val:'3',text:'a + c < 48 and 18a + 12c < 650'},{val:'4',text:'a + c ≤ 48 and 18a + 12c ≤ 650'}],
+    3:[{val:'1',text:'x² · x³ = x⁵'},{val:'2',text:'3ˣ · 3² = 9²ˣ'},{val:'3',text:'−z² = z²'},{val:'4',text:'7ᵃ · 7ᵇ = 7ᵃᵇ'}],
+    4:[{val:'1',text:'x² + x − 4'},{val:'2',text:'x² − x − 7'},{val:'3',text:'x² + 7x − 4'},{val:'4',text:'x² + 7x − 7'}],
+    5:[{val:'1',text:'−2√12 + √100'},{val:'2',text:'−√4 + (1/3)√900'},{val:'3',text:'(1/2)√25 + √64'},{val:'4',text:'√49 + 3√121'}],
+    6:[{val:'1',text:'x = 15'},{val:'2',text:'x = 14'},{val:'3',text:'x = 6'},{val:'4',text:'x = 4'}],
+    7:[{val:'1',text:'Linear growth'},{val:'2',text:'Linear decay'},{val:'3',text:'Exponential growth'},{val:'4',text:'Exponential decay'}],
+    8:[{val:'1',text:'The total number of bacteria currently present'},{val:'2',text:'The percent at which the bacteria are growing'},{val:'3',text:'The initial amount of bacteria'},{val:'4',text:'The number of time periods'}],
+    9:[{val:'1',text:'(30,000/wk)·(7 days/wk)·(60 min/hr)·(1 day/24 hr)'},{val:'2',text:'(30,000/wk)·(1 wk/7 days)·(1 day/24 hr)·(1 hr/60 min)'},{val:'3',text:'(1 wk/30,000)·(1 wk/7 days)·(1 day/24 hr)·(1 hr/60 min)'},{val:'4',text:'(1 wk/30,000)·(7 days/wk)·(24 hr/day)·(60 min/hr)'}],
+    10:[{val:'1',text:'f(x) = (x + 2)(x − 3)'},{val:'2',text:'f(x) = (x − 2)(x + 3)'},{val:'3',text:'f(x) = (x − 2)²(x + 3)'},{val:'4',text:'f(x) = (x − 2)(x + 3)(x − 12)'}],
+    11:[{val:'1',text:'a(t) = 2ᵗ + 25 (exponential)'},{val:'2',text:'b(t) = 10t + 75 (linear)'},{val:'3',text:'c(t) = √(400t) + 80 (square root)'},{val:'4',text:'d(t) = 2(t+1)² − 10t + 50 (quadratic)'}],
+    12:[{val:'1',text:'1/5'},{val:'2',text:'5'},{val:'3',text:'1/25'},{val:'4',text:'25'}],
+    13:[{val:'1',text:'30'},{val:'2',text:'50'},{val:'3',text:'80'},{val:'4',text:'110'}],
+    14:[{val:'1',text:'a(x) = (x−3)²−7, minimum at (3,−7)'},{val:'2',text:'b(x) — graph shows minimum around −4'},{val:'3',text:'c(x) = x²+6x+3, minimum at (−3,−6)'},{val:'4',text:'d(x) — table shows minimum at (−2,−5)'}],
+    15:[{val:'1',text:'aₙ = −3 + (−2)(n − 1)'},{val:'2',text:'aₙ = −2 + (−3)(n − 1)'},{val:'3',text:'aₙ = 3 + (−2)(n − 1)'},{val:'4',text:'aₙ = −2 + (3)(n − 1)'}],
+    16:[{val:'1',text:'mean > mode'},{val:'2',text:'mean = median'},{val:'3',text:'mode = median'},{val:'4',text:'median > mean'}],
+    17:[{val:'1',text:'Ashley: wider and shifted left 3 units'},{val:'2',text:'Beth: narrower and shifted left 3 units'},{val:'3',text:'Carl: wider and shifted right 3 units'},{val:'4',text:'Don: narrower and shifted right 3 units'}],
+    18:[{val:'1',text:'10 mph'},{val:'2',text:'11 mph'},{val:'3',text:'11.6 mph'},{val:'4',text:'14.5 mph'}],
+    19:[{val:'1',text:'2x² − 2x − 30'},{val:'2',text:'2x² − 2x − 40'},{val:'3',text:'2x² − 4x − 30'},{val:'4',text:'2x² − 4x − 40'}],
+    20:[{val:'1',text:'x = 1 and x = 5'},{val:'2',text:'x = −5 and x = 0'},{val:'3',text:'x = −3 and x = 5'},{val:'4',text:'x = 0 and x = 4'}],
+    21:[{val:'1',text:'The additional charge for gas'},{val:'2',text:'The hourly rate Nicole charges'},{val:'3',text:'The number of hours Nicole babysits'},{val:'4',text:'The total Nicole earns from babysitting'}],
+    22:[{val:'1',text:'x = 12/(3a)'},{val:'2',text:'x = 12/(3 − a)'},{val:'3',text:'x = 3a/12'},{val:'4',text:'x = (3 − a)/12'}],
+    23:[{val:'1',text:'(400 m/43.03 s)·(1000 m/0.62 mi)·(1 hr/3600 s)'},{val:'2',text:'(400 m/43.03 s)·(0.62 mi/1000 m)·(1 hr/3600 s)'},{val:'3',text:'(400 m/43.03 s)·(0.62 mi/1000 m)·(3600 s/1 hr)'},{val:'4',text:'(400 m/43.03 s)·(1000 m/0.62 mi)·(3600 s/1 hr)'}],
+    24:[{val:'1',text:'f(x) = −x + 3 — linear, range is all reals'},{val:'2',text:'g(x) = x² + 3 — parabola, range ≥ 3'},{val:'3',text:'h(x) = 3ˣ — exponential, range > 0'},{val:'4',text:'m(x) = |x + 3| — absolute value, range ≥ 0'}],
+  },
+  "June 2025": {
+    1:[{val:'1',text:'5'},{val:'2',text:'20'},{val:'3',text:'5√2'},{val:'4',text:'10√2'}],
+    2:[{val:'1',text:'[1, 4]'},{val:'2',text:'[3, ∞)'},{val:'3',text:'(−∞, 3]'},{val:'4',text:'[−1, 1]'}],
+    3:[{val:'1',text:'Kirsten loses one pound each week (linear)'},{val:'2',text:'Sarah increases grade by 5 points each quarter (linear)'},{val:'3',text:'Tommy reduces spending by $50 each month (linear)'},{val:'4',text:'Dylan grows business by 5% each month (exponential)'}],
+    4:[{val:'1',text:'Both mean and standard deviation of Andrea\'s scores are higher'},{val:'2',text:'Both mean and standard deviation of Joe\'s scores are higher'},{val:'3',text:'Andrea\'s mean is higher, but Joe\'s standard deviation is higher'},{val:'4',text:'Joe\'s mean is higher, but Andrea\'s standard deviation is higher'}],
+    5:[{val:'1',text:'2x² + 3x + 1 — degree 2'},{val:'2',text:'6x³ + 3x² − 2x — degree 3, leading coeff 6'},{val:'3',text:'3x² + 2x + 2 — degree 2'},{val:'4',text:'2x³ + x² + 4x — degree 3, leading coeff 2'}],
+    6:[{val:'1',text:'−10x² + 5x + 5'},{val:'2',text:'−10x² + 5x + 13'},{val:'3',text:'−10x² − 5x + 5'},{val:'4',text:'−10x² − 5x + 13'}],
+    7:[{val:'1',text:'6 inches per week'},{val:'2',text:'8 inches per week'},{val:'3',text:'48 inches per week'},{val:'4',text:'58 inches per week'}],
+    8:[{val:'1',text:'The zero product property'},{val:'2',text:'The commutative property'},{val:'3',text:'The distributive property'},{val:'4',text:'The subtraction property of equality'}],
+    9:[{val:'1',text:'g(x) = |x + 2| — shifts left 2'},{val:'2',text:'h(x) = |x − 2| — shifts right 2'},{val:'3',text:'q(x) = |x| + 2 — shifts up 2'},{val:'4',text:'r(x) = |x| − 2 — shifts down 2'}],
+    10:[{val:'1',text:'2(5 − 4x) + 4x = 5'},{val:'2',text:'2(5 + 4x) + 4x = 5'},{val:'3',text:'2x − 3(5 − 4x) = 10'},{val:'4',text:'2x − 3(5 + 4x) = 10'}],
+    11:[{val:'1',text:'(x − 3)² = 27 − 9'},{val:'2',text:'(x − 3)² = 27 + 9'},{val:'3',text:'(x − 3)² = 27 + 36'},{val:'4',text:'(x − 3)² = 27 − 36'}],
+    12:[{val:'1',text:'The IQR of both teams is the same'},{val:'2',text:'There are more athletes on the swim team than the track team'},{val:'3',text:'The median age of the swim team is less than the track team'},{val:'4',text:'The range of ages of the swim team is smaller than the track team'}],
+    13:[{val:'1',text:'[0, 12]'},{val:'2',text:'[15, 45]'},{val:'3',text:'0 < x ≤ 12'},{val:'4',text:'15 < x ≤ 45'}],
+    14:[{val:'1',text:'Rational — sum can be expressed as an integer'},{val:'2',text:'Rational — sum can be expressed as a nonterminating decimal'},{val:'3',text:'Irrational — sum can be expressed as a terminating decimal'},{val:'4',text:'Irrational — sum cannot be expressed as terminating or repeating decimal'}],
+    15:[{val:'1',text:'(a⁴ − b³)²'},{val:'2',text:'(a⁶ − b⁴)²'},{val:'3',text:'(a⁴)² − (b³)²'},{val:'4',text:'(a⁶)² − (b⁴)²'}],
+    16:[{val:'1',text:'14√3'},{val:'2',text:'34√3'},{val:'3',text:'6√39'},{val:'4',text:'8√39'}],
+    17:[{val:'1',text:'(7x − 4) + x = 44'},{val:'2',text:'(4 − 7x) + x = 44'},{val:'3',text:'7x − 4 = 44'},{val:'4',text:'4 − 7x = 44'}],
+    18:[{val:'1',text:'1'},{val:'2',text:'1/3'},{val:'3',text:'−1'},{val:'4',text:'−1/3'}],
+    19:[{val:'1',text:'A only'},{val:'2',text:'A and B only'},{val:'3',text:'A, B, and C only'},{val:'4',text:'A, B, C, and D'}],
+    20:[{val:'1',text:'m = 2K / v²'},{val:'2',text:'m = 2Kv²'},{val:'3',text:'m = √(2Kv²)'},{val:'4',text:'m = K / (2v²)'}],
+    21:[{val:'1',text:'x = 1/3'},{val:'2',text:'x = 2/3'},{val:'3',text:'x = 4/3'},{val:'4',text:'x = 8/3'}],
+    22:[{val:'1',text:'aₙ = 12·(1/2)ⁿ⁻¹'},{val:'2',text:'aₙ = 12·(1/2)ⁿ'},{val:'3',text:'aₙ = 12·(2)ⁿ⁻¹'},{val:'4',text:'aₙ = 12·(2)ⁿ'}],
+    23:[{val:'1',text:'f(x) — graph shown'},{val:'2',text:'j(x) = 2x²+8x — axis at x = −2'},{val:'3',text:'g(x) — table shows minimum at (0,2), axis at x = 0'},{val:'4',text:'h(x) = x²−4x−5 — axis at x = 2'}],
+    24:[{val:'1',text:'(49 mi/hr)·(1 mi/5280 ft)·(1 hr/60 min)·(1 car/56 ft)'},{val:'2',text:'(49 mi/hr)·(1 mi/5280 ft)·(60 min/hr)·(1 car/56 ft)'},{val:'3',text:'(49 mi/hr)·(5280 ft/mi)·(1 hr/60 min)·(1 car/56 ft)'},{val:'4',text:'(49 mi/hr)·(5280 ft/mi)·(60 min/hr)·(1 car/56 ft)'}],
+  },
+};
+
+// ══════════════════════════════════════════════════════════════════
+// CONVERSION CHARTS
+// ══════════════════════════════════════════════════════════════════
+const CONVERSION_CHARTS = {
+  "June 2022":{maxRaw:86,chart:{86:100,85:99,84:97,83:96,82:95,81:94,80:93,79:92,78:91,77:90,76:89,75:88,74:88,73:87,72:86,71:86,70:86,69:85,68:84,67:84,66:84,65:83,64:83,63:83,62:82,61:82,60:82,59:81,58:81,57:81,56:81,55:80,54:80,53:80,52:80,51:79,50:79,49:79,48:78,47:78,46:78,45:77,44:77,43:77,42:76,41:76,40:75,39:75,38:74,37:74,36:73,35:72,34:72,33:71,32:70,31:69,30:68,29:67,28:66,27:65,26:64,25:63,24:61,23:60,22:59,21:57,20:56,19:55,18:52,17:50,16:48,15:46,14:44,13:42,12:40,11:37,10:34,9:32,8:29,7:26,6:23,5:19,4:16,3:12,2:8,1:4,0:0}},
+  "June 2023":{maxRaw:86,chart:{86:100,85:99,84:97,83:96,82:95,81:94,80:93,79:92,78:91,77:90,76:89,75:89,74:88,73:87,72:87,71:86,70:86,69:86,68:85,67:84,66:84,65:83,64:83,63:83,62:82,61:82,60:82,59:82,58:81,57:81,56:81,55:80,54:80,53:80,52:80,51:79,50:79,49:79,48:78,47:78,46:78,45:77,44:77,43:77,42:76,41:76,40:75,39:75,38:74,37:74,36:73,35:72,34:72,33:71,32:70,31:69,30:68,29:67,28:66,27:65,26:64,25:63,24:62,23:60,22:59,21:58,20:56,19:55,18:53,17:51,16:49,15:47,14:45,13:43,12:40,11:38,10:35,9:32,8:30,7:26,6:23,5:20,4:16,3:13,2:9,1:4,0:0}},
+  "June 2024":{maxRaw:82,chart:{82:100,81:99,80:98,79:96,78:95,77:94,76:92,75:91,74:90,73:89,72:88,71:87,70:86,69:85,68:84,67:84,66:83,65:83,64:82,63:81,62:81,61:80,60:79,59:79,58:78,57:78,56:77,55:77,54:76,53:76,52:75,51:75,50:75,49:74,48:74,47:73,46:73,45:72,44:72,43:72,42:71,41:71,40:70,39:70,38:69,37:69,36:69,35:68,34:68,33:67,32:67,31:66,30:66,29:65,28:64,27:64,26:63,25:62,24:61,23:61,22:60,21:59,20:58,19:56,18:55,17:54,16:52,15:50,14:49,13:47,12:44,11:42,10:40,9:37,8:34,7:31,6:27,5:23,4:19,3:15,2:10,1:5,0:0}},
+  "June 2025":{maxRaw:82,chart:{82:100,81:99,80:97,79:95,78:94,77:92,76:91,75:90,74:89,73:88,72:87,71:86,70:85,69:84,68:84,67:83,66:82,65:82,64:81,63:81,62:80,61:80,60:79,59:79,58:78,57:78,56:77,55:77,54:76,53:76,52:75,51:75,50:74,49:74,48:74,47:73,46:73,45:72,44:72,43:71,42:71,41:71,40:70,39:70,38:69,37:69,36:68,35:68,34:67,33:67,32:66,31:66,30:66,29:65,28:64,27:63,26:63,25:62,24:61,23:60,22:59,21:58,20:57,19:56,18:55,17:54,16:52,15:51,14:49,13:47,12:45,11:43,10:40,9:38,8:35,7:32,6:28,5:25,4:21,3:16,2:11,1:6,0:0}},
+};
+
+// ══════════════════════════════════════════════════════════════════
+// EXAM DATA
+// ══════════════════════════════════════════════════════════════════
+const T = {
+  LEQ:"Linear Equations & Inequalities", LFN:"Linear Functions & Modeling",
+  SYS:"Systems of Equations & Inequalities", QD:"Quadratic Functions & Equations",
+  QF:"Factoring", QCS:"Quadratic Formula / Completing the Square",
+  EXP:"Exponential Functions", POL:"Polynomials", STA:"Statistics & Data Analysis",
+  REG:"Linear Regression", SEQ:"Sequences", REC:"Recursive Sequences (no longer assessed)",
+  FUN:"Functions — Domain, Range & Notation", TRN:"Function Transformations",
+  RAT:"Rational & Irrational Numbers", ROC:"Rate of Change & Unit Conversion", GR:"Graphing",
+};
+
+const EXAMS = {
+  "June 2022":{maxRaw:86,notes:"Questions 26 and 35 cover topics not yet taught (transformations and regression). Question 24 covers recursive sequences, no longer assessed. These are excluded from your score.",parts:[{id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[{n:1,text:"Which correlation shows a causal relationship?",topic:T.STA},{n:2,text:"Given f(x) = 3x − 5, which statement is true?",topic:T.LFN},{n:3,text:"Benny's Café: salad $5.75, each topping $0.75. Which function gives cost c(s)?",topic:T.LFN},{n:4,text:"Which expression is equivalent to x² − 5x + 6?",topic:T.QF},{n:5,text:"Peter has $100 for drinks. Lemonade $2, juice $0.50 each. Which inequality models this?",topic:T.LEQ},{n:6,text:"Which domain is most appropriate for number of items placed in a laundry basket each day in January?",topic:T.FUN},{n:7,text:"What is the solution to ³⁄₂b − 5 = 17?",topic:T.LEQ},{n:8,text:"Which table of values represents an exponential relationship?",topic:T.EXP},{n:9,text:"Which expression is NOT equivalent to (5²ˣ)³?",topic:T.POL},{n:10,text:"Which relation is a function?",topic:T.FUN},{n:11,text:"Ax + By = C: which expression represents y in terms of A, B, C, and x?",topic:T.LEQ},{n:12,text:"What are the zeros of f(x) = (2x + 4)(3x − 4)?",topic:T.QD},{n:13,text:"Joe has dimes and nickels totaling $1.45. Nickels = 5 more than twice the dimes. Which equation finds number of dimes?",topic:T.LEQ},{n:14,text:"Donna and Andrew compare exam scores grade 8–12. Which statement is correct?",topic:T.STA},{n:15,text:"First term of sequence is 5, fifth term is 17. What is the common difference?",topic:T.SEQ},{n:16,text:"Quadratic and linear function graphed together — which intersection situation is NOT possible?",topic:T.GR},{n:17,text:"The expression (m − 3)² is equivalent to?",topic:T.POL},{n:18,text:"Three students explain why (3,4) solves 2y − 3x = 1. Which are correct?",topic:T.LFN},{n:19,text:"Four quadratic functions shown. Which statement about their maximums is true?",topic:T.QD},{n:20,text:"Which is a sixth-degree polynomial with leading coefficient 7 and constant term 4?",topic:T.POL},{n:21,text:"A = P(1 + r)ᵗ — which statement correctly interprets the annual interest rate?",topic:T.EXP},{n:22,text:"Tim runs 50 km in 4.5 hours. Which expression converts this to minutes per mile?",topic:T.ROC},{n:23,text:"Solve x/a + (a−1)/4 = 3/4 for x in terms of a.",topic:T.LEQ},{n:24,text:"Sequence: a₁ = 3, aₙ = 3aₙ₋₁ − 2. What is a₄?",topic:T.REC,flag:"not-assessed",flagNote:"Recursive sequences are no longer assessed. Excluded from your score."}]},{id:"II",title:"Short Answer",credits:2,partial:true,questions:[{n:25,text:"Is the product of √1024 and 3.4 rational or irrational? Explain.",topic:T.RAT},{n:26,text:"Describe the transformations on f(x) = x² to obtain g(x) = (x + 3)² − 4.",topic:T.TRN,flag:"not-yet-taught",flagNote:"Function transformations not yet taught. Excluded from your score."},{n:27,text:"Garage sale profit graph. Find the average rate of change (dollars/hour) over 1 ≤ x ≤ 4.",topic:T.ROC},{n:28,text:"Subtract 3x(x − 2y) from 6(x² + xy) and express as a monomial.",topic:T.POL},{n:29,text:"State the domain and range of the graphed function.",topic:T.FUN},{n:30,text:"Solve 6x² − 5x − 6 = 0 algebraically for the exact values of x.",topic:T.QCS},{n:31,text:"Factor x⁴ − 36x² completely.",topic:T.QF},{n:32,text:"Find exact values of x for x² − 8x + 5 = 0 by completing the square.",topic:T.QCS}]},{id:"III",title:"Extended Response",credits:4,partial:true,questions:[{n:33,text:"Kite height graph — explain zeros in context, state increasing intervals, state maximum height.",topic:T.GR},{n:34,text:"Graph f(x) = |x² − 1| and g(x) = 3x. For how many x does f(x) = g(x)? Explain.",topic:T.GR},{n:35,text:"Driver age vs. speeding accidents. Write linear regression equation and interpret correlation coefficient.",topic:T.REG,flag:"not-yet-taught",flagNote:"Linear regression not yet taught. Excluded from your score."},{n:36,text:"Solve system of inequalities graphically. Is (0,3) a solution? Justify.",topic:T.SYS}]},{id:"IV",title:"Extended Response",credits:6,partial:true,questions:[{n:37,text:"Amusement park tickets: write system of equations, solve algebraically, find cost for group of 4 with 3 children.",topic:T.SYS}]}]},
+  "June 2023":{maxRaw:86,notes:"Question 21 covers recursive sequences, a standard no longer assessed in Algebra I. It is excluded from your score.",parts:[{id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[{n:1,text:"Which expression is equivalent to 9m² − 100?",topic:T.QF},{n:2,text:"Which expression represents an irrational number?",topic:T.RAT},{n:3,text:"Which linear equation represents a line passing through (−3, −8)?",topic:T.LFN},{n:4,text:"(5x² − x + 4) − 3(x² − x − 2) is equivalent to?",topic:T.POL},{n:5,text:"The 24th term of the sequence −5, −11, −17, −23, … is?",topic:T.SEQ},{n:6,text:"When completing the square for x² − 18x + 77 = 0, which equation is a correct step?",topic:T.QCS},{n:7,text:"Which function has the greatest value when x > 1?",topic:T.EXP},{n:8,text:"In b = 1300(2.65)ˣ, the exponent represents?",topic:T.EXP},{n:9,text:"Company ships 30,000 items/week. Which expression gives items per minute?",topic:T.ROC},{n:10,text:"Graph has double root at x = 2, single root at x = −3. A possible equation is?",topic:T.QD},{n:11,text:"If g(x) = −x² − x + 5, then g(−4) equals?",topic:T.FUN},{n:12,text:"Popcorn box 6×4×8 in. Length and width each increase by x. Which function gives volume V(x)?",topic:T.POL},{n:13,text:"The expression 300(4)^(x+3) is equivalent to?",topic:T.EXP},{n:14,text:"Ashley has 7 quarters and dimes, needs at least $3.00. Which inequality finds dimes d needed?",topic:T.LEQ},{n:15,text:"Trapezoid area A = ½(b₁+b₂)h. Which expression gives height h?",topic:T.LEQ},{n:16,text:"g(x) = k|x| with k = ½. Which statement is true comparing f(x) = |x| and g(x)?",topic:T.TRN},{n:17,text:"240 adults chose SUV or sports car. Of those preferring sports cars, approximately what percent were male?",topic:T.STA},{n:18,text:"The solution to 2x² = 72 is?",topic:T.QD},{n:19,text:"Three quadratic functions given in different forms. Which have the same vertex?",topic:T.QD},{n:20,text:"The domain of f(x) = x² + x − 12 is?",topic:T.FUN},{n:21,text:"Father pays son allowance: year 1 = $10, each year = 2× previous − $8. Which recursive formula works?",topic:T.REC,flag:"not-assessed",flagNote:"Recursive sequences are no longer assessed. Excluded from your score."},{n:22,text:"What is the solution to 4 − (2/5)x ≥ (1/3)x + 15?",topic:T.LEQ},{n:23,text:"Which statement is correct about the polynomial 3x² + 5x − 2?",topic:T.POL},{n:24,text:"p(n) models a store's profit from selling n boxes of nails. A reasonable domain would be?",topic:T.FUN}]},{id:"II",title:"Short Answer",credits:2,partial:true,questions:[{n:25,text:"Solve algebraically: −2.4(x + 1.4) = 6.8x − 22.68",topic:T.LEQ},{n:26,text:"State the zeros of f(x) from the graph. Explain your reasoning.",topic:T.QD},{n:27,text:"Breanna's block pattern — friend says it grows exponentially. Is the friend correct? Explain.",topic:T.EXP},{n:28,text:"Data: 20,36,52,56,24,16,40,4,28 books purchased. Construct a box plot.",topic:T.STA},{n:29,text:"Given A = x + 5 and B = x² − 18, express A² + B in standard form.",topic:T.POL},{n:30,text:"Two relations are not functions. Explain how to change each so they become functions.",topic:T.FUN},{n:31,text:"Factor 2x² + 16x − 18 completely.",topic:T.QF},{n:32,text:"Solve 3d² − 8d + 3 = 0 algebraically, rounding to the nearest tenth.",topic:T.QCS}]},{id:"III",title:"Extended Response",credits:4,partial:true,questions:[{n:33,text:"Graph f(x) = |x| + 1 and g(x) = −x² + 6x + 1. Determine all x where f(x) = g(x).",topic:T.GR},{n:34,text:"Temperature data over 24 hours. State increasing intervals, greatest 3-hour rate of change, average rate from hour 12 to 24. Interpret in context.",topic:T.ROC},{n:35,text:"Solve system of inequalities graphically: 2x + 3y ≥ −6 and x < 3y + 6. Is (4,−2) in solution set? Explain.",topic:T.SYS},{n:36,text:"Height and weight data for 7 animals. Write linear regression equation. State and interpret correlation coefficient.",topic:T.REG}]},{id:"IV",title:"Extended Response",credits:6,partial:true,questions:[{n:37,text:"Dana bought roses and daisies on two days. Write system of equations, solve algebraically, find savings at sale prices.",topic:T.SYS}]}]},
+  "June 2024":{maxRaw:82,notes:"All questions on this exam cover taught content. No questions are excluded from scoring.",parts:[{id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[{n:1,text:"Ball launched into air — height recorded each second. Which statement is a valid conclusion?",topic:T.QD},{n:2,text:"Tour bus: ≤48 passengers, adult $18, child $12, need ≥$650. Which system of inequalities models this?",topic:T.SYS},{n:3,text:"Which equation is always true?",topic:T.POL},{n:4,text:"−2(x² − 2x + 1) + (3x² + 3x − 5) is equivalent to?",topic:T.POL},{n:5,text:"Which sum is irrational?",topic:T.RAT},{n:6,text:"Solve 4(x − 5)/3 + 2 = 14.",topic:T.LEQ},{n:7,text:"Rabbit population doubled each month for two years. Which function type best models this?",topic:T.EXP},{n:8,text:"In b = 1300(2.65)ˣ, the exponent represents?",topic:T.EXP},{n:9,text:"30,000 items shipped per week. Which expression gives items per minute?",topic:T.ROC},{n:10,text:"Graph shows double root at x = 2, single root at x = −3. A possible equation is?",topic:T.QD},{n:11,text:"Nancy's salary options over 8 years. Which pay plan gives the highest salary in year 8?",topic:T.EXP},{n:12,text:"3rd term of sequence is 25, 5th term is 625. Which could be the common ratio?",topic:T.SEQ},{n:13,text:"Box plot of snowfall for 12 locations. What is the interquartile range?",topic:T.STA},{n:14,text:"Four quadratic functions in different representations. Which has the smallest minimum value?",topic:T.QD},{n:15,text:"Which equation represents the sequence −2, −5, −8, −11, −14, …?",topic:T.SEQ},{n:16,text:"Dot plot of Jessica's lacrosse goals. Which statement about mean, median, mode is correct?",topic:T.STA},{n:17,text:"g(x) = 2(x − 3)² compared to f(x) = x². Which student description is correct?",topic:T.TRN},{n:18,text:"Dave's bike ride graph. What was his average rate of change in miles per hour?",topic:T.ROC},{n:19,text:"(x − 5)(2x + 7) − (x + 5) is equivalent to?",topic:T.POL},{n:20,text:"f(x) and g(x) graphed together. What is the solution to f(x) = g(x)?",topic:T.GR},{n:21,text:"Nicole's babysitting: C(h) = 6h + 5. The constant term represents?",topic:T.LFN},{n:22,text:"Solve 3x − 7 = ax + 5 for x in terms of a.",topic:T.LEQ},{n:23,text:"Wayde van Niekerk ran 400m in 43.03 seconds. Which calculation gives average speed in miles per hour?",topic:T.ROC},{n:24,text:"Which function has domain of all real numbers and range ≥ 3?",topic:T.FUN}]},{id:"II",title:"Short Answer",credits:2,partial:true,questions:[{n:25,text:"Solve algebraically: 5(x − 2) ≤ 3x + 20",topic:T.LEQ},{n:26,text:"State the zeros of f(x) from the graph. Explain your reasoning.",topic:T.QD},{n:27,text:"Relation R = {(−1,1),(0,3),(−2,−4),(x,5)}. State a value for x that makes this a function. Explain.",topic:T.FUN},{n:28,text:"150 students surveyed about video games and social media. Complete the two-way frequency table.",topic:T.STA},{n:29,text:"Use completing the square to find exact values of x for x² + 10x − 30 = 0.",topic:T.QCS},{n:30,text:"Factor 20x³ − 45x completely.",topic:T.QF}]},{id:"III",title:"Extended Response",credits:4,partial:true,questions:[{n:31,text:"Graph y = x² − 3x − 6 and y = x − 1. State coordinates of all solutions.",topic:T.GR},{n:32,text:"Movie earnings over 6 weeks. Write linear regression equation, state and interpret correlation coefficient.",topic:T.REG},{n:33,text:"Use the quadratic formula to solve 3x² − 10x + 5 = 0. Express in simplest radical form.",topic:T.QCS},{n:34,text:"Graph system of inequalities: 3y + 2x ≤ 15 and y − x > 1. State a point in solution set. Justify.",topic:T.SYS}]},{id:"IV",title:"Extended Response",credits:6,partial:true,questions:[{n:35,text:"Courtney buys lattes and donuts on two days. Write system of equations, check Courtney's guess, solve algebraically for exact prices.",topic:T.SYS}]}]},
+  "June 2025":{maxRaw:82,notes:"All questions on this exam cover taught content. No questions are excluded from scoring.",parts:[{id:"I",title:"Multiple Choice",credits:2,partial:false,questions:[{n:1,text:"The expression 10/√2 is equivalent to?",topic:T.RAT},{n:2,text:"Parabola graphed. Over which interval is it only increasing?",topic:T.QD},{n:3,text:"Which scenario represents an exponential relationship?",topic:T.EXP},{n:4,text:"Andrea and Joe's geometry test scores compared. Which statement about mean and standard deviation is correct?",topic:T.STA},{n:5,text:"Which polynomial has degree 3 and leading coefficient 2?",topic:T.POL},{n:6,text:"(−3x² + 9) − (7x² − 5x + 4) is equivalent to?",topic:T.POL},{n:7,text:"Tomato plant height table. Average rate of change in inches per week between weeks 4 and 12?",topic:T.ROC},{n:8,text:"Chloe solves x² + 5x = 3x + 3 → x² + 2x − 3 = 0. Which property justifies this step?",topic:T.QD},{n:9,text:"Which function represents w(x) = |x| shifted 2 units to the right?",topic:T.TRN},{n:10,text:"System: y + 4x = 5 and 2x − 3y = 10. A step using substitution would be?",topic:T.SYS},{n:11,text:"Which equation is equivalent to x² − 6x = 27 after completing the square?",topic:T.QCS},{n:12,text:"Box plots comparing swim team vs. track team ages. Which statement must be true?",topic:T.STA},{n:13,text:"Piecewise graph shown. The domain of this function is?",topic:T.FUN},{n:14,text:"The sum of 3 and √5 — which statement is correct about rational vs. irrational?",topic:T.RAT},{n:15,text:"Which expression is equivalent to a⁸ − b⁶?",topic:T.QF},{n:16,text:"The sum of 2√27 and 4√12 is?",topic:T.RAT},{n:17,text:"Tim's age + Jack's age = 44. Tim's age is 4 less than 7 times Jack's age x. Which equation models this?",topic:T.LEQ},{n:18,text:"g(x) = (x² − 2)/(x + 3). What is the value of g(−2)?",topic:T.FUN},{n:19,text:"Four graphs shown. Which represent a function?",topic:T.FUN},{n:20,text:"K = ½mv². Write m in terms of K and v.",topic:T.LEQ},{n:21,text:"Solve 2(3x − 1)/3 = x + 2.",topic:T.LEQ},{n:22,text:"Which equation represents the sequence 12, 6, 3, 3/2, … where a₁ = 12?",topic:T.SEQ},{n:23,text:"Which quadratic function has axis of symmetry x = 2?",topic:T.QD},{n:24,text:"Train at 49 mph, cars 56 ft long. Which expression gives cars per minute passing Anna's house?",topic:T.ROC}]},{id:"II",title:"Short Answer",credits:2,partial:true,questions:[{n:25,text:"Complete the two-way frequency table: 100 students, 44 seniors, 65 prefer videos, 42 of those are juniors.",topic:T.STA},{n:26,text:"Solve the inequality: 5(2 − y) > −11y − 8",topic:T.LEQ},{n:27,text:"Express (5x − 3)(−2x + 7) as a trinomial in standard form.",topic:T.POL},{n:28,text:"Arithmetic sequence: first term −20, fourth term −2. Determine the eighth term.",topic:T.SEQ},{n:29,text:"Write equation in slope-intercept form for the line through (−2, 5) with slope −3.",topic:T.LFN},{n:30,text:"Factor x³ − 36x completely.",topic:T.QF}]},{id:"III",title:"Extended Response",credits:4,partial:true,questions:[{n:31,text:"Graph f(x) = −3x and g(x) = x² + 2. State values of x where f(x) = g(x).",topic:T.GR},{n:32,text:"Use quadratic formula to solve 6x² + 2x − 1 = 0. Express in simplest radical form.",topic:T.QCS},{n:33,text:"Cell phone price vs. months since release. Write linear regression equation, state and interpret correlation coefficient.",topic:T.REG},{n:34,text:"Solve algebraically: y = x² + 9x + 4 and y − 2x = −6.",topic:T.SYS}]},{id:"IV",title:"Extended Response",credits:6,partial:true,questions:[{n:35,text:"Sarah earns $6/hr babysitting, $12/hr tutoring, needs ≥$120/week, ≤14 hours total. Write system of inequalities, graph it, state a valid combination.",topic:T.SYS}]}]},
+};
+
+const STARTERS = {
+  [T.LEQ]:"e.g. I set up the equation wrong because I confused which quantity was being multiplied…",
+  [T.LFN]:"e.g. I mixed up slope and y-intercept when reading the context…",
+  [T.SYS]:"e.g. I forgot to substitute back to find both variables after solving for one…",
+  [T.QD]:"e.g. I forgot that vertex form tells you the max/min directly…",
+  [T.QF]:"e.g. I forgot to check for a GCF before factoring the trinomial…",
+  [T.QCS]:"e.g. I made an arithmetic error under the radical when applying the formula…",
+  [T.EXP]:"e.g. I confused exponential growth with linear growth when reading the table…",
+  [T.POL]:"e.g. I forgot to distribute the negative sign when subtracting polynomials…",
+  [T.STA]:"e.g. I confused mean and median when the data set had an outlier…",
+  [T.REG]:"e.g. I reported the wrong value — I need to remember r is the correlation, not r²…",
+  [T.SEQ]:"e.g. I used the wrong formula — I mixed up arithmetic and geometric sequence rules…",
+  [T.FUN]:"e.g. I confused domain and range, or forgot a function can't repeat x-values…",
+  [T.TRN]:"e.g. I confused a horizontal shift with a vertical shift when reading the equation…",
+  [T.RAT]:"e.g. I forgot that adding rational + irrational always gives an irrational result…",
+  [T.ROC]:"e.g. I set up the unit conversion chain in the wrong order so units didn't cancel…",
+  [T.GR]:"e.g. I found the intersection correctly but forgot to state both coordinates…",
+  [T.REC]:"(This question is not assessed — no reflection needed)",
+};
+
+const CORRECT = new Set(["correct","full"]);
+
+// ══ STATE ══
+let currentExam = null, studentName = '', state = {}, teacherNote = '';
+
+// ══ INIT ══
+window.addEventListener('load', () => {
+  const grid = document.getElementById('nameGrid');
+  const students = [
+    "Anna C","Dylan C","Preston D","Ariel F","Justin F",
+    "Sophia GA","Matthew G","Aleksander H","Kylie I","Rosie K",
+    "Alyssa L","Cyrus L","Makayla M","Matthew M","Nathaniel M",
+    "Zuri M","William O","Jax R","Annabelle RJ","Mason R",
+    "Michael S","Emma S","Ben W","TEST A"
+  ];
+  grid.innerHTML = '';
+  students.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'sel-btn';
+    btn.onclick = () => selectName(name, btn);
+    btn.innerHTML = `<span class="sb-main">${name}</span>`;
+    grid.appendChild(btn);
+  });
+});
+
+function selectName(name, el) {
+  studentName = name;
+  document.querySelectorAll('#nameGrid .sel-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectExam(key, el) {
+  currentExam = key;
+  document.querySelectorAll('#examGrid .sel-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+async function startExam() {
+  const err = document.getElementById('setupErr');
+  if (!studentName) { err.textContent='Please select your name.'; err.style.display='block'; return; }
+  if (!currentExam) { err.textContent='Please select an exam.'; err.style.display='block'; return; }
+  err.style.display='none';
+
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+
+  // Fetch teacher note
+  try {
+    if (SCRIPT_URL) {
+      const params = new URLSearchParams({action:'getTeacherNote', student:studentName, exam:currentExam});
+      const res = await fetch(`${SCRIPT_URL}?${params}`, {method:'GET', redirect:'follow'});
+      const data = await res.json();
+      teacherNote = data.note || '';
+    }
+  } catch(e) { teacherNote = ''; }
+
+  state = {};
+  buildQuestions();
+  showScreen('screenQ');
+  btn.disabled = false; btn.textContent = 'Start Reflection →';
+}
+
+// ══ BUILD QUESTIONS ══
+function buildQuestions() {
+  const exam = EXAMS[currentExam];
+  const c = document.getElementById('qContainer');
+  c.innerHTML = '';
+  document.getElementById('examNotice').innerHTML = `<strong>Note for this exam</strong>${exam.notes}`;
+
+  let total = 0;
+  exam.parts.forEach(part => {
+    total += part.questions.length;
+    const ph = document.createElement('div');
+    ph.className = 'part-hdr';
+    ph.innerHTML = `<span class="part-tag">Part ${part.id}</span><span class="part-name">${part.title}</span><span class="part-rule"></span><span class="part-pts">${part.credits} pt${part.credits>1?'s':''} each${part.partial?' · partial credit':' · no partial'}</span>`;
+    c.appendChild(ph);
+
+    const isMC = part.id === 'I';
+
+    part.questions.forEach(q => {
+      state[q.n] = {
+        correct: null,        // true/false for MC
+        wrongChoice: null,    // which answer they chose if wrong
+        score: null,          // for FR
+        reflection: '',
+        topic: q.topic,
+        flag: q.flag || null
+      };
+
+      const card = document.createElement('div');
+      card.className = 'qcard';
+      card.id = `qcard-${q.n}`;
+
+      const flagBanner = q.flag ? `<div class="flag-banner">⚑ ${q.flagNote}</div>` : '';
+      const starter = STARTERS[q.topic] || 'e.g. I need to review this topic because…';
+
+      if (isMC) {
+        // MC: right/wrong buttons → if wrong, show choices → reflection
+        const choices = (ANSWER_CHOICES[currentExam] || {})[q.n] || [];
+        const choiceHtml = choices.map(c =>
+          `<div class="ac-option" data-q="${q.n}" data-val="${c.val}" onclick="setWrongChoice(${q.n},'${c.val}',this)">
+            <span class="ac-num">(${c.val})</span>
+            <span class="ac-text">${c.text}</span>
+          </div>`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="q-head" onclick="toggleBody(${q.n})">
+            <span class="q-num">Q${q.n}</span>
+            <span class="q-text">${q.text}</span>
+            <span class="q-stat" id="stat-${q.n}">tap to reflect</span>
+          </div>
+          ${flagBanner}
+          <div class="q-body" id="body-${q.n}" style="display:none">
+            <div class="wrong-lbl" style="margin-bottom:8px">Did you get this right?</div>
+            <div class="rw-row">
+              <button class="rw-btn got-right" data-q="${q.n}" onclick="setMCResult(${q.n},true,this)">✓ Yes, I got it right</button>
+              <button class="rw-btn got-wrong" data-q="${q.n}" onclick="setMCResult(${q.n},false,this)">✗ No, I got it wrong</button>
+            </div>
+            <div class="wrong-section" id="ws-${q.n}">
+              <div class="wrong-lbl" style="margin-top:14px">Which answer did you choose?</div>
+              <div class="answer-choices">${choiceHtml}</div>
+              <div class="ref-section show">
+                <div class="ref-lbl">Why did you choose that? What were you thinking or what do you think you're missing?</div>
+                <textarea id="ref-${q.n}" placeholder="${starter}" oninput="state[${q.n}].reflection=this.value" rows="2"></textarea>
+              </div>
+            </div>
+            <button class="collapse-btn" onclick="toggleBody(${q.n})">↑ Collapse</button>
+          </div>`;
+      } else {
+        // FR: score chip → if not full credit, reflection sentence
+        let chips = '';
+        for (let i=0; i<=part.credits; i++) {
+          chips += `<span class="chip" data-q="${q.n}" onclick="setScore(${q.n},${i},${part.credits},this)">${i}/${part.credits}</span>`;
+        }
+
+        card.innerHTML = `
+          <div class="q-head" onclick="toggleBody(${q.n})">
+            <span class="q-num">Q${q.n}</span>
+            <span class="q-text">${q.text}</span>
+            <span class="q-stat" id="stat-${q.n}">tap to reflect</span>
+          </div>
+          ${flagBanner}
+          <div class="q-body" id="body-${q.n}" style="display:none">
+            <div class="score-row" style="padding:0 0 14px;border:none">
+              <span class="score-lbl">My score:</span>
+              <div class="chips">${chips}</div>
+            </div>
+            <div class="ref-section" id="rs-${q.n}">
+              <div class="ref-lbl">In one sentence — what went wrong or what do you need to understand?</div>
+              <textarea id="ref-${q.n}" placeholder="${starter}" oninput="state[${q.n}].reflection=this.value" rows="2"></textarea>
+            </div>
+            <button class="collapse-btn" onclick="toggleBody(${q.n})">↑ Collapse</button>
+          </div>`;
+      }
+
+      c.appendChild(card);
+    });
+  });
+  updateProg(total);
+}
+
+// ══ INTERACTIONS ══
+function toggleBody(n) {
+  const b = document.getElementById(`body-${n}`);
+  b.style.display = b.style.display==='none' ? 'block' : 'none';
+}
+
+function setMCResult(n, correct, el) {
+  state[n].correct = correct;
+  const card = document.getElementById(`qcard-${n}`);
+  const stat = document.getElementById(`stat-${n}`);
+  card.querySelectorAll(`.rw-btn[data-q="${n}"]`).forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+
+  const ws = document.getElementById(`ws-${n}`);
+  if (correct) {
+    ws.classList.remove('show');
+    card.className = 'qcard done';
+    stat.textContent = '✓ got it';
+    stat.className = 'q-stat ok';
+  } else {
+    ws.classList.add('show');
+    card.className = 'qcard done-wrong';
+    stat.textContent = '✎ reflecting';
+    stat.className = 'q-stat wrong';
+  }
+  updateProg();
+}
+
+function setWrongChoice(n, val, el) {
+  state[n].wrongChoice = val;
+  const card = document.getElementById(`qcard-${n}`);
+  card.querySelectorAll(`.ac-option[data-q="${n}"]`).forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  const stat = document.getElementById(`stat-${n}`);
+  stat.textContent = '✎ reflected';
+  updateProg();
+}
+
+function setScore(n, s, max, el) {
+  state[n].score = s;
+  state[n].correct = (s === max);
+  el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+
+  const rs = document.getElementById(`rs-${n}`);
+  const stat = document.getElementById(`stat-${n}`);
+  const card = document.getElementById(`qcard-${n}`);
+
+  if (s === max) {
+    rs.classList.remove('show');
+    card.className = 'qcard done';
+    stat.textContent = '✓ full credit';
+    stat.className = 'q-stat ok';
+  } else {
+    rs.classList.add('show');
+    card.className = 'qcard done-wrong';
+    stat.textContent = `✎ ${s}/${max} pts`;
+    stat.className = 'q-stat wrong';
+  }
+  updateProg();
+}
+
+let _total = 37;
+function updateProg(t) {
+  if (t) _total = t;
+  const exam = EXAMS[currentExam];
+  if (!exam) return;
+  let reflected = 0;
+  exam.parts.forEach(part => {
+    part.questions.forEach(q => {
+      const s = state[q.n];
+      if (!s) return;
+      if (part.id === 'I') { if (s.correct !== null) reflected++; }
+      else { if (s.score !== null) reflected++; }
+    });
+  });
+  document.getElementById('progBar').style.width = (reflected/_total*100) + '%';
+  document.getElementById('floatProg').textContent = `${reflected} / ${_total} reflected`;
+}
+
+// ══ SCORE CALC ══
+function calcScore() {
+  const exam = EXAMS[currentExam];
+  const chart = CONVERSION_CHARTS[currentExam];
+  let raw = 0;
+  exam.parts.forEach(part => {
+    part.questions.forEach(q => {
+      if (q.flag) return;
+      const s = state[q.n];
+      if (!s) return;
+      if (part.id === 'I') { if (s.correct === true) raw += 2; }
+      else if (s.score !== null) raw += s.score;
+    });
+  });
+  return { raw, scaled: chart.chart[Math.min(raw, CONVERSION_CHARTS[currentExam].maxRaw)] ?? 0 };
+}
+
+// ══ SUBMIT ══
+async function submitReflection() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const { raw, scaled } = calcScore();
+  const exam = EXAMS[currentExam];
+  const responses = [];
+
+  exam.parts.forEach(part => {
+    part.questions.forEach(q => {
+      const s = state[q.n];
+      const isMC = part.id === 'I';
+      const choiceText = (isMC && s.wrongChoice)
+        ? ((ANSWER_CHOICES[currentExam]||{})[q.n]||[]).find(c=>c.val===s.wrongChoice)?.text || ''
+        : '';
+      responses.push({
+        part: part.id,
+        question: q.n,
+        topic: q.topic,
+        flag: q.flag || '',
+        score: isMC ? (s.correct ? 2 : 0) : s.score,
+        correct: s.correct,
+        wrongChoice: s.wrongChoice || '',
+        wrongChoiceText: choiceText,
+        reflection: s.reflection || ''
+      });
+    });
+  });
+
+  // Save to sheet (fire and forget)
+  if (SCRIPT_URL) {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action:'submitReflection', student:studentName, exam:currentExam,
+        responses, rawScore:raw, scaledScore:scaled})
+    }).catch(() => {});
+  }
+
+  showSuccess(raw, scaled, responses);
+}
+
+// ══ SUCCESS ══
+async function showSuccess(raw, scaled, responses) {
+  document.getElementById('submitBtn').style.display = 'none';
+  const panel = document.getElementById('successPanel');
+  panel.style.display = 'block';
+
+  const maxRaw = CONVERSION_CHARTS[currentExam].maxRaw;
+  const level = scaled>=85?'5 — Mastery':scaled>=80?'4 — Proficient':scaled>=65?'3 — Passing':'2 — Below Passing';
+  document.getElementById('scoreSummary').innerHTML = `
+    <div class="ss-item"><span class="ss-num">${raw}<span style="font-size:1rem;opacity:.5">/${maxRaw}</span></span><span class="ss-label">Raw Score</span></div>
+    <div class="ss-item"><span class="ss-num">${scaled}</span><span class="ss-label">Scale Score</span></div>
+    <div class="ss-item"><span class="ss-num" style="font-size:1rem;line-height:1.3">${level}</span><span class="ss-label">Performance Level</span></div>`;
+
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+  buildPrompt(responses, raw, scaled);
+
+  // Call Claude directly
+  try {
+    const wrongItems = responses.filter(r => r.correct === false && !r.flag);
+    const topicBreakdown = {};
+    wrongItems.forEach(r => {
+      if (!topicBreakdown[r.topic]) topicBreakdown[r.topic] = [];
+      topicBreakdown[r.topic].push(r);
+    });
+
+    const topicSummary = Object.entries(topicBreakdown)
+      .sort((a,b) => b[1].length - a[1].length)
+      .map(([topic, items]) => {
+        const details = items.map(i => {
+          let line = `  Q${i.question}`;
+          if (i.wrongChoiceText) line += ` — chose: "${i.wrongChoiceText}"`;
+          if (i.score !== null && i.part !== 'I') line += ` — score: ${i.score}`;
+          if (i.reflection) line += ` — student wrote: "${i.reflection}"`;
+          return line;
+        }).join('\n');
+        return `${topic} (${items.length} question${items.length>1?'s':''}):\n${details}`;
+      }).join('\n\n');
+
+    const errorPattern = (() => {
+      const hasWrongChoices = wrongItems.some(r => r.wrongChoice);
+      const hasReflections = wrongItems.some(r => r.reflection);
+      const frErrors = wrongItems.filter(r => r.part !== 'I');
+      const partialFR = frErrors.filter(r => r.score > 0 && r.score < (r.part==='II'?2:r.part==='III'?4:6));
+      if (partialFR.length > frErrors.length/2) return "tends to get partial credit on written responses — has the right idea but loses points on execution or completeness";
+      if (wrongItems.length < 5) return "is performing well overall, with only a few errors";
+      return "has a mix of knowledge gaps and execution errors across multiple topics";
+    })();
+
+    const prompt = `You are a skilled math teacher helping an Algebra I student prepare for the New York State Regents exam.
+
+STUDENT: ${studentName}
+EXAM: ${currentExam} Algebra I Regents (Practice)
+RAW SCORE: ${raw} → SCALE SCORE: ${scaled}/100
+PERFORMANCE LEVEL: ${scaled>=85?'Mastery (85+)':scaled>=80?'Proficient (80-84)':scaled>=65?'Passing (65-79)':'Below Passing (<65)'}
+
+TEACHER'S NOTES:
+${teacherNote || 'No teacher notes provided yet.'}
+
+ERROR ANALYSIS — Questions missed with details:
+${topicSummary || 'Student answered all questions correctly.'}
+
+OVERALL PATTERN: This student ${errorPattern}.
+
+Write a personalized, direct study plan. Use teacher notes as your primary lens — they override self-assessment when there's a conflict. When a student's wrong answer choice is provided, use it to diagnose the SPECIFIC misconception, not just the general topic.
+
+Structure your response EXACTLY as follows:
+
+**Where you are right now**
+2-3 honest sentences about the score. Reference the scale score and what it means for the actual exam.
+
+**Your biggest priority**
+Name the single most important topic and explain WHY based on their specific error pattern and wrong answer choices.
+
+**Your top 3 focus areas**
+For each: name the topic, describe the specific misconception shown by their wrong answer or reflection, and give one concrete targeted action.
+
+**One thing you're doing well**
+Something genuine based on what they got right or teacher notes. Don't fabricate.
+
+**Your next step right now**
+One specific, small, actionable thing to do TODAY.
+
+Under 400 words. Write directly to the student using "you". Prose only inside each section.`;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 700,
+        messages: [{ role: 'user', content: prompt }]
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    const apiData = await apiRes.json();
+    const plan = apiData.content?.[0]?.text || '';
+    if (plan) {
+      document.getElementById('planContent').innerHTML = formatPlan(plan);
+    } else {
+      document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+    }
+  } catch(e) {
+    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+  }
+}
+
+function formatPlan(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .split('\n\n')
+    .filter(p => p.trim())
+    .map(p => `<p>${p.trim()}</p>`)
+    .join('');
+}
+
+// ══ AI TUTOR PROMPT ══
+function buildPrompt(responses, raw, scaled) {
+  const wrongItems = responses.filter(r => r.correct === false && !r.flag);
+  const byTopic = {};
+  wrongItems.forEach(r => {
+    if (!byTopic[r.topic]) byTopic[r.topic] = [];
+    byTopic[r.topic].push(r);
+  });
+  const topTopics = Object.entries(byTopic).sort((a,b) => b[1].length-a[1].length).slice(0,3);
+
+  const wrongDetails = wrongItems.slice(0,6).map(r => {
+    let line = `  Q${r.question} (${r.topic})`;
+    if (r.wrongChoiceText) line += ` — I chose: "${r.wrongChoiceText}"`;
+    if (r.score !== null && r.part !== 'I') line += ` — I got ${r.score} points`;
+    if (r.reflection) line += `\n    What I was thinking: "${r.reflection}"`;
+    return line;
+  }).join('\n');
+
+  const lines = [
+    `I'm an Algebra I student preparing for the New York State Regents exam.`,
+    `I just completed a practice exam (${currentExam}) and I need targeted help.`,
+    ``,
+    `MY SCORE: ${scaled}/100 (raw score ${raw})`,
+    ``,
+    `MY WEAKEST TOPICS:`,
+    ...topTopics.map(([t,items],i) => `${i+1}. ${t} — missed ${items.length} question${items.length>1?'s':''}`),
+    ``,
+    `SPECIFIC QUESTIONS I GOT WRONG:`,
+    wrongDetails || '  (none recorded)',
+    ``,
+    `PLEASE ACT AS MY PERSONAL TUTOR AND DO THE FOLLOWING:`,
+    ``,
+    `1. Look at the specific wrong answers I chose above. For each one, tell me what misconception that answer reveals — not just "review this topic" but specifically what I was thinking wrong.`,
+    ``,
+    `2. Give me 2-3 targeted practice problems for each of my top 2 weakest topics. Make the problems similar in style to actual Regents questions.`,
+    ``,
+    `3. For each practice problem, give me a hint I can use if I get stuck — but don't show me the full solution yet. I want to try first.`,
+    ``,
+    `4. After I attempt the problems, I will photograph my work and upload the image to you. Please look carefully at exactly what I wrote and tell me specifically what I did right, what I did wrong, and what to fix.`,
+    ``,
+    `5. Based on my error patterns, give me one concrete test-taking strategy I can use on the actual Regents to avoid losing points — something specific, not generic advice.`,
+  ];
+
+  document.getElementById('promptText').textContent = lines.join('\n');
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(document.getElementById('promptText').textContent).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+console.log('Script finished');
+</script>
+</body>
+</html>
