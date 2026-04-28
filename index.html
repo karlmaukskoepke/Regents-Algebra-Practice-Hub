@@ -743,7 +743,6 @@ async function showSuccess(raw, scaled, responses) {
     <div class="ss-item"><span class="ss-num" style="font-size:1rem;line-height:1.3">${level}</span><span class="ss-label">Performance Level</span></div>`;
 
   panel.scrollIntoView({behavior:'smooth', block:'start'});
-  buildPrompt(responses, raw, scaled);
 
   // Call Claude directly
   try {
@@ -823,7 +822,7 @@ Write a prompt in first person from the student's perspective that:
 - Instructs the AI that after the student attempts the problems, they will photograph their work and upload it for detailed feedback
 - Asks for one specific test-taking strategy based on their error pattern
 Make this prompt specific to THIS student's actual errors, not generic. Write it so the student can copy it verbatim and get immediate help.
-;
+';
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
@@ -848,8 +847,19 @@ Make this prompt specific to THIS student's actual errors, not generic. Write it
     const apiData = await apiRes.json();
     const plan = apiData.content?.[0]?.text || '';
     if (plan) {
-      document.getElementById('planContent').innerHTML = formatPlan(plan);
-    } else {
+  const promptMarker = '**Your AI Tutor Prompt';
+  const promptIdx = plan.indexOf(promptMarker);
+  if (promptIdx > -1) {
+    const planPart = plan.substring(0, promptIdx).trim();
+    const promptPart = plan.substring(promptIdx).trim();
+    document.getElementById('planContent').innerHTML = formatPlan(planPart);
+    const promptLines = promptPart.split('\n').slice(2).join('\n').trim();
+    document.getElementById('promptText').textContent = promptLines;
+  } else {
+    document.getElementById('planContent').innerHTML = formatPlan(plan);
+    document.getElementById('promptText').textContent = 'Ask your teacher for your AI tutor prompt.';
+  }
+} else { 
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
   } catch(e) {
@@ -864,52 +874,6 @@ function formatPlan(text) {
     .filter(p => p.trim())
     .map(p => `<p>${p.trim()}</p>`)
     .join('');
-}
-
-// ══ AI TUTOR PROMPT ══
-function buildPrompt(responses, raw, scaled) {
-  const wrongItems = responses.filter(r => r.correct === false && !r.flag);
-  const byTopic = {};
-  wrongItems.forEach(r => {
-    if (!byTopic[r.topic]) byTopic[r.topic] = [];
-    byTopic[r.topic].push(r);
-  });
-  const topTopics = Object.entries(byTopic).sort((a,b) => b[1].length-a[1].length).slice(0,3);
-
-  const wrongDetails = wrongItems.slice(0,6).map(r => {
-    let line = `  Q${r.question} (${r.topic})`;
-    if (r.wrongChoiceText) line += ` — I chose: "${r.wrongChoiceText}"`;
-    if (r.score !== null && r.part !== 'I') line += ` — I got ${r.score} points`;
-    if (r.reflection) line += `\n    What I was thinking: "${r.reflection}"`;
-    return line;
-  }).join('\n');
-
-  const lines = [
-    `I'm an Algebra I student preparing for the New York State Regents exam.`,
-    `I just completed a practice exam (${currentExam}) and I need targeted help.`,
-    ``,
-    `MY SCORE: ${scaled}/100 (raw score ${raw})`,
-    ``,
-    `MY WEAKEST TOPICS:`,
-    ...topTopics.map(([t,items],i) => `${i+1}. ${t} — missed ${items.length} question${items.length>1?'s':''}`),
-    ``,
-    `SPECIFIC QUESTIONS I GOT WRONG:`,
-    wrongDetails || '  (none recorded)',
-    ``,
-    `PLEASE ACT AS MY PERSONAL TUTOR AND DO THE FOLLOWING:`,
-    ``,
-    `1. Look at the specific wrong answers I chose above. For each one, tell me what misconception that answer reveals — not just "review this topic" but specifically what I was thinking wrong.`,
-    ``,
-    `2. Give me 2-3 targeted practice problems for each of my top 2 weakest topics. Make the problems similar in style to actual Regents questions.`,
-    ``,
-    `3. For each practice problem, give me a hint I can use if I get stuck — but don't show me the full solution yet. I want to try first.`,
-    ``,
-    `4. After I attempt the problems, I will photograph my work and upload the image to you. Please look carefully at exactly what I wrote and tell me specifically what I did right, what I did wrong, and what to fix.`,
-    ``,
-    `5. Based on my error patterns, give me one concrete test-taking strategy I can use on the actual Regents to avoid losing points — something specific, not generic advice.`,
-  ];
-
-  document.getElementById('promptText').textContent = lines.join('\n');
 }
 
 function copyPrompt() {
