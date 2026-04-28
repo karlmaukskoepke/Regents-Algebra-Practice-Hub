@@ -243,15 +243,15 @@ textarea::placeholder{color:#aaa;font-style:italic}
       <div class="plan-content" id="planContent"><div class="plan-loading">Generating your study plan</div></div>
     </div>
     <div class="plan-box" style="margin-top:16px">
-      <h4>AI Tutor Prompt</h4>
-      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:10px">
-        Copy this and paste it into Claude, ChatGPT, or any AI assistant to get a personalized tutoring session. After you attempt the practice problems, take a photo of your work and upload it for specific feedback on exactly what you did right and what to fix.
-      </p>
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
-        <span id="promptText"></span>
-      </div>
-    </div>
+  <h4>Your AI Tutor Prompt</h4>
+  <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:10px">
+    Claude wrote this prompt specifically for you based on your results. Copy it and paste it into any AI to get practice problems and personalized feedback. After you attempt the problems, photograph your work and upload it for specific feedback.
+  </p>
+  <div class="prompt-box">
+    <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+    <span id="promptText">Generating your tutor prompt…</span>
+  </div>
+</div>
   </div>
 </div>
 
@@ -569,7 +569,7 @@ function buildQuestions() {
             <span class="q-stat" id="stat-${q.n}">tap to reflect</span>
           </div>
           ${flagBanner}
-          <div class="q-body" id="body-${q.n}" style="display:none">
+          <div class="q-body" id="body-${q.n}">
             <div class="score-row" style="padding:0 0 14px;border:none">
               <span class="score-lbl">My score:</span>
               <div class="chips">${chips}</div>
@@ -811,7 +811,19 @@ Something genuine based on what they got right or teacher notes. Don't fabricate
 **Your next step right now**
 One specific, small, actionable thing to do TODAY.
 
-Under 400 words. Write directly to the student using "you". Prose only inside each section.`;
+Under 400 words. Write directly to the student using "you". Prose only inside each section.
+
+After the study plan sections above, add one final section:
+
+**Your AI Tutor Prompt — copy and paste this into any AI**
+Write a prompt in first person from the student's perspective that:
+- States their name, exam, and score
+- Lists 3-4 specific concept areas to review based on their errors
+- Asks the AI to generate 2-3 practice problems per concept area in Regents style
+- Instructs the AI that after the student attempts the problems, they will photograph their work and upload it for detailed feedback
+- Asks for one specific test-taking strategy based on their error pattern
+Make this prompt specific to THIS student's actual errors, not generic. Write it so the student can copy it verbatim and get immediate help.
+;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
