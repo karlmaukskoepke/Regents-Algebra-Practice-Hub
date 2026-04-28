@@ -738,33 +738,50 @@ async function showSuccess(raw, scaled, responses) {
   // Build AI prompt immediately (doesn't need API)
   buildPrompt(responses, raw, scaled);
 
-  // Now call Claude for real study plan
-if (SCRIPT_URL) {
-  try {
-    const res = await fetch(SCRIPT_URL, {
+ // Save reflection (fire and forget)
+  if (SCRIPT_URL) {
+    fetch(SCRIPT_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        action: 'generatePlan',
+        action: 'submitReflection',
         student: studentName,
         exam: currentExam,
         responses,
         rawScore: raw,
-        scaledScore: scaled,
-        teacherNote
+        scaledScore: scaled
       })
-    });
-    const data = await res.json();
-    if (data.plan) {
-      document.getElementById('planContent').innerHTML = formatPlan(data.plan);
-    } else {
+    }).catch(() => {});
+  }
+
+  // Generate plan via GET
+  if (SCRIPT_URL) {
+    try {
+      const params = new URLSearchParams({
+        action: 'generatePlan',
+        student: studentName,
+        exam: currentExam,
+        rawScore: raw,
+        scaledScore: scaled,
+        teacherNote,
+        responses: JSON.stringify(responses)
+      });
+      const res = await fetch(`${SCRIPT_URL}?${params}`, {
+        method: 'GET',
+        redirect: 'follow'
+      });
+      const data = await res.json();
+      if (data.plan) {
+        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
+      } else {
+        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+      }
+    } catch(e) {
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
-  } catch(e) {
-    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
   }
-}
-}
+}    // closes showSuccess
   
 function formatPlan(text) {
   return text
