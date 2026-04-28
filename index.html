@@ -764,8 +764,7 @@ async function showSuccess(raw, scaled, responses) {
         exam: currentExam,
         rawScore: raw,
         scaledScore: scaled,
-        teacherNote,
-        responses: JSON.stringify(responses)
+        teacherNote
       });
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 25000);
