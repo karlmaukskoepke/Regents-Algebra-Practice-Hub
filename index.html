@@ -810,7 +810,8 @@ Something genuine based on what they got right or teacher notes. Don't fabricate
 **Your next step right now**
 One specific, small, actionable thing to do TODAY.
 
-Under 400 words. Write directly to the student using "you". Prose only inside each section.
+Under 500 words total. Write directly to the student using "you". 
+For the study plan sections, use 1-2 punchy sentences followed by 2-3 bullet points where it helps clarity — especially for "Your top 3 focus areas" and "Your next step right now". Keep it scannable and direct, not essay-like.
 
 After the study plan sections above, add one final section:
 
@@ -837,7 +838,7 @@ Make this prompt specific to THIS student's actual errors, not generic. Write it
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 700,
+        max_tokens: 1200,
         messages: [{ role: 'user', content: prompt }]
       }),
       signal: controller.signal
