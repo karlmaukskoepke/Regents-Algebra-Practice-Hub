@@ -739,29 +739,32 @@ async function showSuccess(raw, scaled, responses) {
   buildPrompt(responses, raw, scaled);
 
   // Now call Claude for real study plan
-  if (SCRIPT_URL) {
-    try {
-      const params = new URLSearchParams({
+if (SCRIPT_URL) {
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
         action: 'generatePlan',
-        payload: JSON.stringify({student:studentName, exam:currentExam,
-          responses, rawScore:raw, scaledScore:scaled, teacherNote})
-      });
-      const res = await fetch(`${SCRIPT_URL}?${params}`, {
-        redirect: 'follow',
-        method: 'GET'
-      });
-      const data = await res.json();
-      if (data.plan) {
-        document.getElementById('planContent').innerHTML = formatPlan(data.plan);
-      } else {
-        document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
-      }
-    } catch(e) {
+        student: studentName,
+        exam: currentExam,
+        responses,
+        rawScore: raw,
+        scaledScore: scaled,
+        teacherNote
+      })
+    });
+    const data = await res.json();
+    if (data.plan) {
+      document.getElementById('planContent').innerHTML = formatPlan(data.plan);
+    } else {
       document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
     }
-  }  // ← this closing brace was missing
-}    // ← closes showSuccess
-
+  } catch(e) {
+    document.getElementById('planContent').innerHTML = `<p style="color:var(--muted)">Study plan could not be generated. Use the AI Tutor Prompt below.</p>`;
+  }
+}
+  
 function formatPlan(text) {
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
